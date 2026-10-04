@@ -14,6 +14,11 @@ ln -sf "$HERE/vimrc" "$HOME/.vimrc"
 mkdir -p "$HOME/.vim"
 ln -sf "$HERE/coc-settings.json" "$HOME/.vim/coc-settings.json"
 
+echo ">> registering the repo as a Vim package (:Cheatsheet, :help vim-c-env)"
+mkdir -p "$HOME/.vim/pack/vim-c-env/start"
+ln -sfn "$HERE" "$HOME/.vim/pack/vim-c-env/start/vim-c-env"
+vim -Es -u NONE -c "helptags $HERE/doc" -c 'qa' </dev/null || true
+
 echo ">> installing vim-plug (if missing)"
 PLUG="$HOME/.vim/autoload/plug.vim"
 if [ ! -f "$PLUG" ]; then

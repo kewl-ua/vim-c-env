@@ -1,6 +1,7 @@
 # vim-env — management targets.
 # Run `make` (or `make help`) to list them.
 VIM ?= vim
+PACKDIR := $(HOME)/.vim/pack/vim-c-env/start
 .DEFAULT_GOAL := help
 
 .PHONY: help install link update doctor cheatsheet example clean uninstall
@@ -16,7 +17,10 @@ link: ## only symlink vimrc + coc-settings.json into place
 	@ln -sf "$(CURDIR)/vimrc" "$(HOME)/.vimrc"
 	@mkdir -p "$(HOME)/.vim"
 	@ln -sf "$(CURDIR)/coc-settings.json" "$(HOME)/.vim/coc-settings.json"
-	@echo "linked ~/.vimrc and ~/.vim/coc-settings.json -> $(CURDIR)"
+	@mkdir -p "$(PACKDIR)"
+	@ln -sfn "$(CURDIR)" "$(PACKDIR)/vim-c-env"
+	@$(VIM) -Es -u NONE -c "helptags $(CURDIR)/doc" -c 'qa' </dev/null || true
+	@echo "linked ~/.vimrc, ~/.vim/coc-settings.json and the Vim package -> $(CURDIR)"
 
 update: ## update plugins (PlugUpdate) and coc extensions (CocUpdate)
 	@$(VIM) -Es -u "$(HOME)/.vimrc" -c 'PlugUpdate --sync' -c 'qa' </dev/null || true
@@ -48,3 +52,5 @@ uninstall: ## remove the symlinks this repo created (leaves plugins intact)
 	  else echo "~/.vimrc is not our symlink — left alone"; fi
 	@if [ -L "$(HOME)/.vim/coc-settings.json" ]; then rm -f "$(HOME)/.vim/coc-settings.json"; echo "removed coc-settings.json symlink"; \
 	  else echo "~/.vim/coc-settings.json is not our symlink — left alone"; fi
+	@if [ -L "$(PACKDIR)/vim-c-env" ]; then rm -f "$(PACKDIR)/vim-c-env"; echo "removed the Vim package symlink"; \
+	  else echo "no Vim package symlink to remove"; fi

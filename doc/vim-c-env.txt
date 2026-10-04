@@ -1,0 +1,125 @@
+*vim-c-env.txt*  Vim as a C/C++ IDE with clangd                    *vim-c-env*
+
+                          VIM-C-ENV CHEATSHEET
+
+Open this page with :Cheatsheet, or \? in Normal mode. Close it with :q.
+The leader key is \ (backslash). Every mapping below comes from the vimrc
+in this repository.
+
+==============================================================================
+CONTENTS                                                  *vim-c-env-contents*
+
+  1. Workflow ........................................... |vim-c-env-workflow|
+  2. Code navigation .................................. |vim-c-env-navigation|
+  3. Completion ....................................... |vim-c-env-completion|
+  4. Refactor and format ................................ |vim-c-env-refactor|
+  5. Files, search, edit ................................... |vim-c-env-files|
+  6. NERDTree ........................................... |vim-c-env-nerdtree|
+  7. Surround ........................................... |vim-c-env-surround|
+  8. Commands ........................................... |vim-c-env-commands|
+  9. Troubleshooting ..................................... |vim-c-env-trouble|
+
+==============================================================================
+1. WORKFLOW                                               *vim-c-env-workflow*
+
+clangd needs the project's build flags. Generate them once, then edit:
+>
+    cd <project>
+    bear -- make        # writes compile_commands.json
+    vim main.c
+<
+A single file needs nothing: clangd falls back to default flags.
+Without make, put compile_flags.txt in the project root, one flag per
+line. With CMake, configure with -DCMAKE_EXPORT_COMPILE_COMMANDS=ON.
+Re-run bear only when flags or the file list change.
+
+==============================================================================
+2. CODE NAVIGATION                                      *vim-c-env-navigation*
+
+    gd              Go to definition.
+    gr              Find all references.
+    gy              Go to type definition.
+    gi              Go to implementation.
+    K               Documentation for the symbol under the cursor.
+    ]g  [g          Next / previous diagnostic.
+    CTRL-O  CTRL-I  Jump back / forward.
+
+==============================================================================
+3. COMPLETION                                           *vim-c-env-completion*
+
+    <Tab>           Next item in the completion menu.
+    <S-Tab>         Previous item.
+    <CR>            Accept the selected item.
+    <C-Space>       Open the menu manually.
+
+The menu opens by itself while you type.
+
+==============================================================================
+4. REFACTOR AND FORMAT                                    *vim-c-env-refactor*
+
+    \rn             Rename the symbol everywhere clangd can see it.
+    \ca             Code action (quick-fix) at the cursor.
+    \f              Format the file with clang-format.
+    {Visual}\f      Format the selected lines.
+
+The formatting style comes from the nearest .clang-format file.
+
+==============================================================================
+5. FILES, SEARCH, EDIT                                       *vim-c-env-files*
+
+    CTRL-N          Toggle the NERDTree file tree.
+    :Files          Fuzzy-find files (fzf).
+    :Rg {text}      Search file contents (ripgrep).
+    \c<Space>       Toggle comment on the line or the selection.
+
+==============================================================================
+6. NERDTREE                                               *vim-c-env-nerdtree*
+
+Inside the tree opened with CTRL-N:
+
+    o  <CR>         Open the file, or expand the directory.
+    t               Open in a new tab.
+    i  s            Open in a horizontal / vertical split.
+    p               Jump to the parent directory.
+    R               Refresh the tree.
+    m               Menu: create, delete, move, copy.
+    I               Toggle hidden files.
+    q               Close the tree.
+
+==============================================================================
+7. SURROUND                                               *vim-c-env-surround*
+
+    ysiw"           Wrap the word under the cursor in double quotes.
+    cs"'            Change the surrounding " to '.
+    ds"             Delete the surrounding ".
+    yss)            Wrap the whole line in ().
+
+==============================================================================
+8. COMMANDS                                               *vim-c-env-commands*
+
+    :Cheatsheet         Open this page. Takes modifiers: :vert Cheatsheet,
+                        :tab Cheatsheet.
+    :CocInfo            coc status. Check that clangd is running.
+    :CocList diagnostics
+                        Every error and warning in a list.
+    :CocList extensions Installed coc extensions.
+    :CocCommand clangd.switchSourceHeader
+                        Jump between foo.c and foo.h.
+    :PlugInstall        Install plugins added to the vimrc.
+    :PlugUpdate         Update plugins.
+    :CocUpdate          Update coc extensions.
+
+==============================================================================
+9. TROUBLESHOOTING                                         *vim-c-env-trouble*
+
+    No completion       Run :CocInfo; clangd must be running.
+                        Run :CocList extensions; coc-clangd must be listed.
+    clangd not found    Install clangd, or set "clangd.path" in
+                        ~/.vim/coc-settings.json.
+    Errors on #include  The project has no compile_commands.json or
+                        compile_flags.txt. See |vim-c-env-workflow|.
+    <Tab> inserts a tab The coc client is not running. Check :CocInfo.
+
+Project page: https://github.com/kewl-ua/vim-c-env
+
+ vim:tw=78:ts=8:noet:ft=help:norl:

@@ -103,6 +103,14 @@ on purpose.
 
 ![Formatting](assets/format.gif)
 
+### Cheatsheet inside Vim
+
+`:Cheatsheet` (or `\?`) opens this keybinding reference as a native Vim help
+page next to your code. Links in the contents jump with `CTRL-]`, and
+`:help vim-c-env` works too.
+
+![Cheatsheet inside Vim](assets/cheatsheet.gif)
+
 ---
 
 ## Architecture
@@ -230,10 +238,14 @@ New-Item -ItemType Directory "$HOME\vimfiles\autoload" -Force | Out-Null
 copy coc-settings.json "$HOME\vimfiles\coc-settings.json"
 iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim `
   -OutFile "$HOME\vimfiles\autoload\plug.vim"
+New-Item -ItemType Directory "$HOME\vimfiles\pack\vim-c-env\start" -Force | Out-Null
+New-Item -ItemType Junction "$HOME\vimfiles\pack\vim-c-env\start\vim-c-env" `
+  -Target (Get-Location) | Out-Null
 ```
 
-Open gVim and run `:PlugInstall`, then `:CocInstall coc-clangd`. The config
-already has `has("win32")` branches for the shell and the gruvbox theme.
+Open gVim and run `:PlugInstall`, `:CocInstall coc-clangd` and
+`:helptags ALL` (for `:Cheatsheet`). The config already has `has("win32")`
+branches for the shell and the gruvbox theme.
 
 ### <img src="https://cdn.simpleicons.org/apple/000000/FFFFFF" height="20" alt=""> macOS
 
@@ -270,7 +282,7 @@ Then clone and bootstrap as in [Then, on any distro](#then-on-any-distro).
 | `make` / `make help` | list the targets |
 | `make doctor` | check vim features, node, clangd, bear |
 | `make install` | full bootstrap (`install.sh`) |
-| `make link` | only symlink the config files (no plugins) |
+| `make link` | only symlink the config files and the Vim package (no plugins) |
 | `make update` | `PlugUpdate` + `CocUpdate` |
 | `make cheatsheet` | open `cheatsheet/index.html` in a browser |
 | `make example` | build the example C project |
@@ -291,6 +303,9 @@ Then clone and bootstrap as in [Then, on any distro](#then-on-any-distro).
    `~/.vimfiles/plugged` (set in `vimrc`).
 4. **coc-clangd** is installed as a coc extension; it starts the `clangd` it finds
    on your `PATH`, with the flags from `coc-settings.json`.
+5. **The repo itself** is linked as a Vim package
+   (`~/.vim/pack/vim-c-env/start/vim-c-env`), so Vim loads `plugin/` (the
+   `:Cheatsheet` command) and `doc/` (the help page) automatically.
 
 clangd itself is a **system package** — the script does not touch it.
 
@@ -382,8 +397,9 @@ It also ships a `.clang-format` — the style `\f` applies (4 spaces, 100 column
 
 ## Keybindings
 
-Full visual version — **`cheatsheet/index.html`** (`make cheatsheet`).
-Leader key is `\`.
+Inside Vim: **`:Cheatsheet`** or **`\?`** opens this reference as a help page
+(`:help vim-c-env`). In a browser: **`cheatsheet/index.html`**
+(`make cheatsheet`). Leader key is `\`.
 
 **Navigation**
 | Key | Action |
@@ -447,7 +463,7 @@ Leader key is `\`.
 | `ds"` | delete surrounding `"` |
 | `yss)` | wrap the whole line in `()` |
 
-**Commands:** `:CocInfo`, `:CocList diagnostics`, `:CocList extensions`,
+**Commands:** `:Cheatsheet`, `:CocInfo`, `:CocList diagnostics`, `:CocList extensions`,
 `:CocCommand clangd.switchSourceHeader` (`.c` ↔ `.h`), `:PlugInstall`, `:PlugUpdate`.
 
 ---
@@ -648,6 +664,10 @@ vim-c-env/
 ├── Makefile              # convenience targets (install/update/doctor/...)
 ├── _config.yml           # GitHub Pages / SEO settings
 ├── assets/               # demo gifs + social preview image
+├── doc/
+│   └── vim-c-env.txt     # cheatsheet as a Vim help page (:Cheatsheet)
+├── plugin/
+│   └── vim-c-env.vim     # defines :Cheatsheet and \?
 ├── cheatsheet/
 │   └── index.html        # visual cheatsheet (gruvbox)
 ├── example/
@@ -665,7 +685,7 @@ gruvbox, nerdcommenter, vim-surround, vim-sensible.
 ## Uninstall
 
 ```bash
-make uninstall     # removes only the ~/.vimrc and ~/.vim/coc-settings.json symlinks
+make uninstall     # removes only the symlinks: ~/.vimrc, ~/.vim/coc-settings.json, the Vim package
 ```
 
 Plugins in `~/.vimfiles/plugged`, vim-plug, and coc extensions stay — remove them
