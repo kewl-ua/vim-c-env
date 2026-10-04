@@ -12,6 +12,7 @@ Vim, fully local.
 ## Contents
 
 - [Features](#features)
+- [Architecture](#architecture)
 - [Requirements](#requirements)
 - [Quick start](#quick-start)
 - [Makefile targets](#makefile-targets)
@@ -35,6 +36,26 @@ Vim, fully local.
 - File explorer (NERDTree), fuzzy finder (fzf), status line (airline),
   commenting (nerdcommenter), surround editing (vim-surround).
 - A single `./install.sh` (or `make install`) bootstraps everything from scratch.
+
+---
+
+## Architecture
+
+How the pieces talk to each other while you edit:
+
+```mermaid
+flowchart LR
+    you["You editing<br/>main.c"] --> vim["Vim"]
+    vim <-->|"LSP (JSON-RPC)"| coc["coc.nvim<br/>+ coc-clangd"]
+    coc <--> clangd["clangd"]
+    clangd -->|reads| cc["compile_commands.json"]
+    clangd -->|indexes| src["your .c / .h files"]
+    clangd -.->|"completion, diagnostics,<br/>go-to, format"| vim
+```
+
+Vim is the editor, **coc.nvim** is the LSP client, **clangd** is the brain that
+actually understands C. clangd learns your build flags from
+`compile_commands.json` and indexes your sources, then feeds results back to Vim.
 
 ---
 
@@ -116,6 +137,35 @@ vim example/main.c
 
 clangd itself is a **system package** — the script does not touch it.
 
+The bootstrap flow:
+
+```mermaid
+flowchart TD
+    a["make install"] --> b["symlink vimrc + coc-settings.json"]
+    b --> c{"vim-plug<br/>present?"}
+    c -->|no| d["download plug.vim"]
+    c -->|yes| e["PlugInstall (plugins)"]
+    d --> e
+    e --> f["CocInstall coc-clangd"]
+    f --> g["ready to use"]
+```
+
+And what happens the moment you open a C file:
+
+```mermaid
+sequenceDiagram
+    participant V as Vim
+    participant C as coc.nvim
+    participant D as clangd
+    V->>C: open main.c
+    C->>D: initialize + didOpen
+    D->>D: read compile_commands.json, index
+    D-->>V: diagnostics (underlines)
+    V->>C: type "pri"
+    C->>D: completion request
+    D-->>V: printf, putchar, ...
+```
+
 ---
 
 ## C workflow
@@ -139,6 +189,23 @@ vim main.c        # clangd picks up compile_commands.json automatically
 
 Why it matters: without the flag list, clangd doesn't know your `-I` includes and
 `-D` defines, and will complain about `#include`s and macros.
+
+How clangd ends up with the right flags, depending on your project:
+
+```mermaid
+flowchart TD
+    q{"How is the<br/>project built?"}
+    q -->|single file| s["nothing needed —<br/>clangd uses defaults"]
+    q -->|make| m["bear -- make"]
+    q -->|CMake| k["-DCMAKE_EXPORT_<br/>COMPILE_COMMANDS=ON"]
+    q -->|"custom / headers only"| ff["write compile_flags.txt"]
+    m --> cc["compile_commands.json"]
+    k --> cc
+    cc --> cl["clangd reads the flags"]
+    ff --> cl
+    s --> cl
+    cl --> v["Vim: completion,<br/>diagnostics, go-to"]
+```
 
 ---
 
