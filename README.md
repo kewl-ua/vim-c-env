@@ -16,7 +16,7 @@ in through **coc.nvim**, plus snippets, builds into quickfix, **gdb** debugging
 and git. One command installs it on Linux, macOS or Windows; it also runs in
 Neovim and Docker.
 
-![vim-c-env: Vim in the centre with clangd, coc.nvim, snippets, build, debugger, git, files, Neovim, Docker and ARM support around it](assets/hero.gif)
+![vim-c-env: Vim in the centre with clangd, coc.nvim, snippets, build, debugger, git, files, Neovim, UNIX and embedded (STM32, ESP32) around it; slogan: Good for system. Fine for embedded.](assets/hero.gif)
 
 ## Features
 

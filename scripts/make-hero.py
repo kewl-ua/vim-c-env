@@ -7,14 +7,14 @@ import math, os, re, subprocess, shutil, tempfile, urllib.request
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 WORK = tempfile.mkdtemp(prefix="vce-hero-")
-W, H, FPS, DUR = 1280, 640, 15, 9.5
+W, H, FPS, DUR = 1280, 640, 15, 11.5
 N = int(FPS * DUR)
 
 BG, CARD, EDGE, FG, MUTED = "#1d2021", "#282828", "#3c3836", "#ebdbb2", "#a89984"
 SANS, MONO = "DejaVu Sans", "DejaVu Sans Mono"
 
 ICON = {}
-for s in ["vim", "llvm", "nodedotjs", "gnu", "git", "neovim", "docker", "arm"]:
+for s in ["vim", "llvm", "nodedotjs", "gnu", "git", "neovim", "linux", "arm"]:
     req = urllib.request.Request(f"https://cdn.simpleicons.org/{s}", headers={"User-Agent": "vim-c-env/make-hero"})
     svg = urllib.request.urlopen(req).read().decode()
     ICON[s] = re.search(r' d="([^"]+)"', svg).group(1)
@@ -27,13 +27,13 @@ TOP = [("clangd", "completion · go-to", "llvm", "#83a598"),
 BOT = [("Git", "fugitive · gitgutter", "git", "#fb4934"),
        ("Files", "NERDTree · fzf", "folder", "#b8bb26"),
        ("Neovim", "same config", "neovim", "#8ec07c"),
-       ("Docker", "no install needed", "docker", "#83a598"),
-       ("ARM Cortex-M", "STM32 · query-driver", "arm", "#d3869b")]
+       ("UNIX", "man · POSIX · strace", "linux", "#83a598"),
+       ("Embedded", "STM32 · ESP32", "arm", "#d3869b")]
 
 XS = [150, 395, 640, 885, 1130]
 CW, CH = 232, 80
 TOP_Y, BOT_Y = 34, 526
-HX, HY, HW, HH = 470, 196, 340, 248
+HX, HY, HW, HH = 440, 182, 400, 276
 ATT = [512, 576, 640, 704, 768]
 
 # arrival order alternates top / bottom
@@ -43,6 +43,7 @@ for i in range(5):
 T0, STEP = 1.2, 0.42
 START = {key: T0 + n * STEP for n, key in enumerate(ORDER)}
 T_TITLE = T0 + 9 * STEP + 0.75
+T_SLOGAN = T_TITLE + 1.1
 
 
 def clamp(x): return max(0.0, min(1.0, x))
@@ -127,15 +128,21 @@ def frame(t):
         o.append(f'<rect x="{HX}" y="{HY}" width="{HW}" height="{HH}" rx="20" fill="none" '
                  f'stroke="#b8bb26" stroke-opacity="{fin:.3f}" stroke-width="3"/>')
     k = 104 / 24
-    o.append(f'<path transform="translate({640 - 52} {236}) scale({k})" d="{ICON["vim"]}" fill="#019733"/>')
+    o.append(f'<path transform="translate({640 - 52} {206}) scale({k})" d="{ICON["vim"]}" fill="#019733"/>')
     vim_op = 1 - prog(t, T_TITLE - 0.3, 0.35)
-    o.append(f'<text x="640" y="392" font-family="{SANS}" font-weight="bold" font-size="30" '
+    o.append(f'<text x="640" y="366" font-family="{SANS}" font-weight="bold" font-size="30" '
              f'text-anchor="middle" fill="{FG}" opacity="{vim_op:.3f}">Vim</text>')
     if fin > 0:
-        o.append(f'<text x="640" y="384" font-family="{MONO}" font-weight="bold" font-size="34" '
+        o.append(f'<text x="640" y="358" font-family="{MONO}" font-weight="bold" font-size="34" '
                  f'text-anchor="middle" fill="#fe8019" opacity="{fin:.3f}">vim-c-env</text>'
-                 f'<text x="640" y="415" font-family="{SANS}" font-size="17" text-anchor="middle" '
+                 f'<text x="640" y="388" font-family="{SANS}" font-size="17" text-anchor="middle" '
                  f'fill="{MUTED}" opacity="{fin:.3f}">Vim as a C/C++ IDE</text>')
+    slo = prog(t, T_SLOGAN, 0.7)
+    if slo > 0:
+        o.append(f'<line x1="520" y1="406" x2="760" y2="406" stroke="{EDGE}" stroke-width="1.5" opacity="{slo:.3f}"/>'
+                 f'<text x="640" y="436" font-family="{SANS}" font-weight="bold" font-size="16" '
+                 f'text-anchor="middle" opacity="{slo:.3f}">'
+                 f'<tspan fill="#b8bb26">Good for system.</tspan> <tspan fill="#fe8019">Fine for embedded.</tspan></text>')
     o.append('</g>')
 
     # cards

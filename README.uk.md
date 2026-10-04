@@ -16,7 +16,7 @@
 **gdb** і git. Встановлюється однією командою на Linux, macOS або Windows,
 працює також у Neovim і Docker.
 
-![vim-c-env: Vim у центрі, навколо clangd, coc.nvim, сніпети, збірка, дебагер, git, файли, Neovim, Docker і ARM](assets/hero.gif)
+![vim-c-env: Vim у центрі, навколо clangd, coc.nvim, сніпети, збірка, дебагер, git, файли, Neovim, UNIX та embedded (STM32, ESP32); слоган: Good for system. Fine for embedded.](assets/hero.gif)
 
 ## Можливості
 
