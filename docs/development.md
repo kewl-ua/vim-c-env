@@ -60,7 +60,8 @@ vim-c-env/
 │   ├── smoke-test.sh     # make test: headless checks of the setup
 │   ├── smoke.vim         # the Vim-side half of those checks
 │   ├── record-demos.sh   # re-records the README gifs (make demos)
-│   └── make-hero.py      # animated README header + social preview (make hero)
+│   ├── make-hero.py      # animated README header + social preview (make hero)
+│   └── esp-clangd-setup.sh # writes .clangd for an ESP-IDF project
 ├── _config.yml           # GitHub Pages / SEO settings
 ├── assets/               # demo gifs + social preview image
 ├── UltiSnips/
@@ -72,6 +73,7 @@ vim-c-env/
 ├── cheatsheet/
 │   └── index.html        # visual cheatsheet (gruvbox)
 ├── example-arm/          # bare-metal STM32F407 blink (Cortex-M4)
+├── example-esp32/        # ESP-IDF FreeRTOS blink, any ESP32 chip
 ├── example-unix/         # POSIX pipeline: fork, pipe, exec; asan/valgrind/strace targets
 ├── example/
 │   ├── main.c            # demo project

@@ -224,6 +224,33 @@ nnoremap <silent> <leader>m :silent make! <bar> redraw! <bar> cwindow<CR>
 nnoremap <silent> ]q :cnext<CR>
 nnoremap <silent> [q :cprevious<CR>
 
+" ESP-IDF projects: \m runs "idf.py build" instead of make. The project root is
+" the first CMakeLists.txt upwards that includes tools/cmake/project.cmake
+" (main/CMakeLists.txt, the component file, is skipped).
+function! s:EspIdfMakeprg() abort
+  let dir = expand('%:p:h')
+  while 1
+    let cml = findfile('CMakeLists.txt', dir . ';')
+    if empty(cml)
+      return
+    endif
+    let cml = fnamemodify(cml, ':p')
+    if match(readfile(cml, '', 40), 'tools/cmake/project\.cmake') >= 0
+      let &l:makeprg = 'idf.py -C ' . shellescape(fnamemodify(cml, ':h')) . ' build'
+      return
+    endif
+    let up = fnamemodify(cml, ':h:h')
+    if up ==# fnamemodify(cml, ':h')
+      return
+    endif
+    let dir = up
+  endwhile
+endfunction
+augroup esp_idf
+  autocmd!
+  autocmd BufRead,BufNewFile *.c,*.h,*.cc,*.cpp,*.hpp call s:EspIdfMakeprg()
+augroup END
+
 " ============================================================
 " Git (fugitive + gitgutter)
 " ============================================================
@@ -268,7 +295,7 @@ nnoremap <silent> <F11> :Step<CR>
 ```json
 {
   "clangd.arguments": [
-    "--query-driver=**/arm-none-eabi-*",
+    "--query-driver=**/arm-none-eabi-*,**/xtensa-esp*-elf-*,**/riscv32-esp-elf-*",
     "--background-index",
     "--clang-tidy",
     "--header-insertion=never",

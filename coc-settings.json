@@ -1,6 +1,6 @@
 {
   "clangd.arguments": [
-    "--query-driver=**/arm-none-eabi-*",
+    "--query-driver=**/arm-none-eabi-*,**/xtensa-esp*-elf-*,**/riscv32-esp-elf-*",
     "--background-index",
     "--clang-tidy",
     "--header-insertion=never",

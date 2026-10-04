@@ -29,7 +29,8 @@
 - **Git:** статус, blame, diff і додавання змін по ханках.
 - **Програмування під UNIX:** `\k` відкриває правильну man-сторінку; POSIX-сніпети;
   приклад, налаштований під санітайзери, Valgrind і strace.
-- **Вбудовані системи:** clangd бачить тулчейн `arm-none-eabi`; є приклад для STM32.
+- **Вбудовані системи:** приклади для STM32 (ARM Cortex-M) і ESP32 (ESP-IDF, Xtensa і
+  RISC-V); clangd бачить крос-тулчейни.
 - **Шпаргалка всередині Vim:** `:Cheatsheet`.
 
 Так це виглядає в роботі:
@@ -75,7 +76,7 @@ Leader — `\`. Усі клавіші: [Гарячі клавіші](docs/uk/key
 | [Гарячі клавіші](docs/uk/keybindings.md) | усі мапінги за темами |
 | [Робочий цикл C](docs/uk/c-workflow.md) | `compile_commands.json`, bear, CMake; приклад |
 | [Програмування під UNIX](docs/uk/unix.md) | man-сторінки, POSIX-прапорці, санітайзери, Valgrind, strace |
-| [Вбудовані системи](docs/uk/embedded.md) | приклад для STM32, `--query-driver` для clangd |
+| [Вбудовані системи](docs/uk/embedded.md) | приклади для STM32 і ESP32, налаштування clangd |
 | [Налаштування](docs/uk/customizing.md) | типові зміни і повний конфіг |
 | [Типові проблеми](docs/uk/troubleshooting.md) | симптоми та рішення |
 | [Neovim](docs/uk/neovim.md) · [Docker](docs/uk/docker.md) | інші способи запуску |

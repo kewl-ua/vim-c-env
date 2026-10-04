@@ -20,6 +20,14 @@ call s:Check('<C-l> expands snippets', maparg('<C-l>', 'i') =~# 'coc-snippets-ex
 call s:Check('\k opens C man pages', maparg('\k', 'n') =~# 'CMan')
 call s:Check(':Man exists', exists(':Man') == 2)
 
+if !empty($VCE_REPO)
+  execute 'edit ' . fnameescape($VCE_REPO . '/example-esp32/main/main.c')
+  call s:Check('\m builds ESP-IDF projects with idf.py', &l:makeprg =~# '^idf\.py ')
+  execute 'edit ' . fnameescape($VCE_REPO . '/example/main.c')
+  call s:Check('\m stays make outside ESP-IDF', &l:makeprg ==# '' || &l:makeprg ==# 'make')
+  enew
+endif
+
 try
   help vim-c-env-debug
   call s:Check('help page vim-c-env opens', &filetype ==# 'help')

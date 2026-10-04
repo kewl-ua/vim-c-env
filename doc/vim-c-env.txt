@@ -89,6 +89,10 @@ UNIX and POSIX:
     getopt  getline Option loop / read a stream line by line.
     tcpserver       TCP socket: bind and listen.
 
+ESP-IDF:
+
+    app_main        Entry point with a FreeRTOS task.
+
 ==============================================================================
 5. REFACTOR AND FORMAT                                    *vim-c-env-refactor*
 

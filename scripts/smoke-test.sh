@@ -22,7 +22,7 @@ report() { # name, command
 # 1. Vim-side checks (see scripts/smoke.vim)
 coc_cmd=()
 [ -n "${COC_HOME:-}" ] && coc_cmd=(--cmd "let g:coc_config_home='$COC_HOME'")
-VCE_SMOKE_OUT="$OUT" vim -Nu "$VIMRC" ${coc_cmd[@]+"${coc_cmd[@]}"} -Es \
+VCE_REPO="$REPO" VCE_SMOKE_OUT="$OUT" vim -Nu "$VIMRC" ${coc_cmd[@]+"${coc_cmd[@]}"} -Es \
   -S "$REPO/scripts/smoke.vim" </dev/null >/dev/null 2>&1
 if [ -s "$OUT" ]; then
   cat "$OUT"
@@ -35,7 +35,7 @@ fi
 # 1b. The same checks in Neovim, through nvim/init.vim
 if command -v nvim >/dev/null 2>&1; then
   NOUT="$(mktemp)"
-  VCE_SMOKE_OUT="$NOUT" nvim --headless -u "$REPO/nvim/init.vim" \
+  VCE_REPO="$REPO" VCE_SMOKE_OUT="$NOUT" nvim --headless -u "$REPO/nvim/init.vim" \
     -S "$REPO/scripts/smoke.vim" </dev/null >/dev/null 2>&1
   if [ -s "$NOUT" ]; then
     sed -E 's/^(ok   |FAIL )/\1nvim: /' "$NOUT"

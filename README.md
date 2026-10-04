@@ -29,7 +29,8 @@ Neovim and Docker.
 - **Git** status, blame, diff and per-hunk staging.
 - **UNIX programming:** `\k` opens the right man page; POSIX snippets; an example
   set up for sanitizers, Valgrind and strace.
-- **Embedded:** clangd sees the `arm-none-eabi` toolchain; an STM32 example is included.
+- **Embedded:** STM32 (ARM Cortex-M) and ESP32 (ESP-IDF, Xtensa and RISC-V) examples;
+  clangd sees the cross toolchains.
 - **Cheatsheet inside Vim:** `:Cheatsheet`.
 
 In a real session:
@@ -75,7 +76,7 @@ Leader is `\`. All keys: [Keybindings](docs/keybindings.md), or `:Cheatsheet` in
 | [Keybindings](docs/keybindings.md) | every mapping by topic |
 | [C workflow](docs/c-workflow.md) | `compile_commands.json`, bear, CMake; the example |
 | [UNIX programming](docs/unix.md) | man pages, POSIX flags, sanitizers, Valgrind, strace |
-| [Embedded (ARM Cortex-M)](docs/embedded.md) | STM32 example, clangd `--query-driver` |
+| [Embedded](docs/embedded.md) | STM32 and ESP32 examples, clangd setup |
 | [Customizing](docs/customizing.md) | common tweaks and the full config |
 | [Troubleshooting](docs/troubleshooting.md) | symptoms and fixes |
 | [Neovim](docs/neovim.md) · [Docker](docs/docker.md) | other ways to run it |
