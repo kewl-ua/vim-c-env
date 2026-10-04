@@ -3,9 +3,13 @@
 Thumbs.db
 desktop.ini
 
-# editor / vim
-*.swp
-*.swo
+# editor / vim (swap files: .swp, then .swo ... .swa, .svz ... when taken)
+[._]*.s[a-v][a-z]
+!*.svg
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
 *~
 .vscode/
 .idea/
