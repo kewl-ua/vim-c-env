@@ -1,0 +1,10 @@
+{
+  "clangd.path": "/usr/lib/llvm/22/bin/clangd",
+  "clangd.arguments": [
+    "--background-index",
+    "--clang-tidy",
+    "--header-insertion=never",
+    "--completion-style=detailed",
+    "-j=4"
+  ]
+}

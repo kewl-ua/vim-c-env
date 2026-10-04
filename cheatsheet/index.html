@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vim C Cheatsheet</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: a sticky title bar over a responsive grid of reference cards.
+     Palette grounded in the editor theme — gruvbox (light default, dark override). */
+  :root {
+    --bg:        #fbf1c7;  /* gruvbox light bg0 */
+    --surface:   #f2e5bc;  /* bg0_s */
+    --surface-2: #ebdbb2;  /* bg1   */
+    --border:    #d5c4a1;  /* bg2   */
+    --fg:        #3c3836;  /* fg1   */
+    --muted:     #7c6f64;  /* fg4   */
+    --accent:    #af3a03;  /* orange (headings / brand) */
+    --key-fg:    #427b58;  /* aqua  (keys) */
+    --key-bg:    #ebddb2;
+    --cmd:       #076678;  /* blue  (ex-commands) */
+    --good:      #79740e;  /* green */
+    --red:       #9d0006;
+    --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:        #282828;  /* gruvbox dark bg0 */
+      --surface:   #32302f;  /* bg0_s */
+      --surface-2: #3c3836;  /* bg1   */
+      --border:    #504945;  /* bg2   */
+      --fg:        #ebdbb2;  /* fg1   */
+      --muted:     #a89984;  /* fg4   */
+      --accent:    #fe8019;  /* bright orange */
+      --key-fg:    #8ec07c;  /* bright aqua */
+      --key-bg:    #3c3836;
+      --cmd:       #83a598;  /* bright blue */
+      --good:      #b8bb26;  /* bright green */
+      --red:       #fb4934;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#282828; --surface:#32302f; --surface-2:#3c3836; --border:#504945;
+    --fg:#ebdbb2; --muted:#a89984; --accent:#fe8019; --key-fg:#8ec07c;
+    --key-bg:#3c3836; --cmd:#83a598; --good:#b8bb26; --red:#fb4934;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    line-height: 1.5;
+    margin: 0;
+  }
+  img { max-width: 100%; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; padding-block: 0 56px; }
+
+  /* ---- header ---- */
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .head-inner {
+    max-width: 1080px; margin: 0 auto; padding: 16px 20px;
+    display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  }
+  .brand {
+    font-family: var(--mono); font-weight: 600; font-size: 1.35rem;
+    color: var(--accent); letter-spacing: -0.5px; margin: 0;
+  }
+  .brand .caret { color: var(--good); }
+  .sub { font-family: var(--mono); font-size: .78rem; color: var(--muted); margin: 0; }
+  .leader-note { margin-left: auto; font-family: var(--mono); font-size: .74rem; color: var(--muted); }
+  .leader-note kbd { margin: 0 2px; }
+  .theme-toggle {
+    font-family: var(--mono); font-size: .72rem; color: var(--muted);
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 5px 9px; cursor: pointer; line-height: 1;
+  }
+  .theme-toggle:hover { color: var(--fg); border-color: var(--muted); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---- workflow strip ---- */
+  .flow {
+    margin-top: 28px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px 20px;
+  }
+  .flow h2 { font-family: var(--mono); font-size: .72rem; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+  .flow ol { list-style: none; counter-reset: step; margin: 0; padding: 0;
+    display: flex; gap: 10px; flex-wrap: wrap; }
+  .flow li { counter-increment: step; flex: 1 1 180px; min-width: 0;
+    display: flex; gap: 10px; align-items: flex-start; }
+  .flow li::before {
+    content: counter(step); font-family: var(--mono); font-weight: 600; font-size: .8rem;
+    color: var(--bg); background: var(--accent); border-radius: 50%;
+    width: 22px; height: 22px; flex: 0 0 22px; display: grid; place-items: center; margin-top: 1px;
+  }
+  .flow code { font-family: var(--mono); font-size: .82rem; color: var(--cmd); }
+  .flow .desc { font-size: .82rem; color: var(--muted); display: block; }
+
+  /* ---- grid of cards ---- */
+  .grid { margin-top: 20px; display: grid; gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+  .card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 4px 18px 14px; min-width: 0; }
+  .card h3 {
+    font-family: var(--mono); font-size: .92rem; color: var(--accent);
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--border); padding: 14px 0 10px; margin: 0 0 4px;
+  }
+  .card h3 .dot { width: 8px; height: 8px; border-radius: 2px; background: var(--key-fg); flex: 0 0 8px; }
+  .card.cmd h3 .dot { background: var(--cmd); }
+  .card.cmd h3 { color: var(--cmd); }
+
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 7px 0; vertical-align: top; border-bottom: 1px solid color-mix(in srgb, var(--border) 50%, transparent); }
+  tr:last-child td { border-bottom: 0; }
+  td.k { white-space: nowrap; padding-right: 14px; width: 1%; }
+  td.d { color: var(--fg); font-size: .9rem; }
+
+  kbd {
+    font-family: var(--mono); font-size: .8rem; font-weight: 500;
+    color: var(--key-fg); background: var(--key-bg);
+    border: 1px solid var(--border); border-bottom-width: 2px;
+    border-radius: 5px; padding: 2px 6px; white-space: nowrap; line-height: 1.7;
+  }
+  code.ex { font-family: var(--mono); font-size: .82rem; color: var(--cmd);
+    background: var(--key-bg); border: 1px solid var(--border); border-radius: 5px;
+    padding: 2px 6px; white-space: nowrap; }
+  .plus { color: var(--muted); font-family: var(--mono); font-size: .78rem; margin: 0 2px; }
+
+  footer { margin-top: 28px; text-align: center; font-family: var(--mono);
+    font-size: .74rem; color: var(--muted); }
+  footer .stack b { color: var(--good); font-weight: 600; }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-inner">
+    <div>
+      <h1 class="brand"><span class="caret">:</span>Vim&nbsp;C&nbsp;Cheatsheet</h1>
+      <p class="sub">coc.nvim · clangd 22 · gruvbox</p>
+    </div>
+    <span class="leader-note">leader = <kbd>\</kbd></span>
+    <button class="theme-toggle" id="themeBtn" type="button" aria-label="Перемкнути тему">◐ тема</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="flow" aria-label="Робочий цикл">
+    <h2>Робочий цикл</h2>
+    <ol>
+      <li><div><code>cd</code> у проєкт<span class="desc">корінь із сорсами</span></div></li>
+      <li><div><code>bear -- make</code><span class="desc">раз, або коли змінив флаги</span></div></li>
+      <li><div><code>vim main.c</code><span class="desc">clangd підхопить сам</span></div></li>
+      <li><div>пишеш код<span class="desc">доповнення й помилки наживо</span></div></li>
+    </ol>
+  </section>
+
+  <div class="grid">
+
+    <section class="card">
+      <h3><span class="dot"></span>Навігація по коду</h3>
+      <table>
+        <tr><td class="k"><kbd>gd</kbd></td><td class="d">до визначення</td></tr>
+        <tr><td class="k"><kbd>gr</kbd></td><td class="d">усі використання символу</td></tr>
+        <tr><td class="k"><kbd>gy</kbd></td><td class="d">до типу</td></tr>
+        <tr><td class="k"><kbd>gi</kbd></td><td class="d">до реалізації</td></tr>
+        <tr><td class="k"><kbd>K</kbd></td><td class="d">документація під курсором</td></tr>
+        <tr><td class="k"><kbd>]g</kbd> <span class="plus">/</span> <kbd>[g</kbd></td><td class="d">наступна / попередня помилка</td></tr>
+        <tr><td class="k"><kbd>Ctrl</kbd>+<kbd>o</kbd> <span class="plus">/</span> <kbd>Ctrl</kbd>+<kbd>i</kbd></td><td class="d">назад / вперед по стрибках</td></tr>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3><span class="dot"></span>Автодоповнення</h3>
+      <table>
+        <tr><td class="k"><kbd>Tab</kbd></td><td class="d">наступний варіант у списку</td></tr>
+        <tr><td class="k"><kbd>Shift</kbd>+<kbd>Tab</kbd></td><td class="d">попередній варіант</td></tr>
+        <tr><td class="k"><kbd>Enter</kbd></td><td class="d">підтвердити вибір</td></tr>
+        <tr><td class="k"><kbd>Ctrl</kbd>+<kbd>Space</kbd></td><td class="d">викликати вручну</td></tr>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3><span class="dot"></span>Рефакторинг &amp; формат</h3>
+      <table>
+        <tr><td class="k"><kbd>\rn</kbd></td><td class="d">перейменувати символ усюди</td></tr>
+        <tr><td class="k"><kbd>\ca</kbd></td><td class="d">code action (quick-fix)</td></tr>
+        <tr><td class="k"><kbd>\f</kbd></td><td class="d">форматувати (clang-format)</td></tr>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3><span class="dot"></span>Файли, пошук, правки</h3>
+      <table>
+        <tr><td class="k"><kbd>Ctrl</kbd>+<kbd>n</kbd></td><td class="d">дерево файлів (NERDTree)</td></tr>
+        <tr><td class="k"><code class="ex">:Files</code></td><td class="d">fuzzy-пошук файлів</td></tr>
+        <tr><td class="k"><code class="ex">:Rg текст</code></td><td class="d">пошук по вмісту (ripgrep)</td></tr>
+        <tr><td class="k"><kbd>\c</kbd><kbd>Space</kbd></td><td class="d">за/роз-коментувати</td></tr>
+        <tr><td class="k"><kbd>ysiw"</kbd></td><td class="d">обгорнути слово в лапки</td></tr>
+        <tr><td class="k"><kbd>cs"'</kbd> <span class="plus">/</span> <kbd>ds"</kbd></td><td class="d">змінити / прибрати обгортку</td></tr>
+      </table>
+    </section>
+
+    <section class="card cmd">
+      <h3><span class="dot"></span>coc / clangd команди</h3>
+      <table>
+        <tr><td class="k"><code class="ex">:CocInfo</code></td><td class="d">діагностика coc (чи живий clangd)</td></tr>
+        <tr><td class="k"><code class="ex">:CocList diagnostics</code></td><td class="d">усі помилки проєкту списком</td></tr>
+        <tr><td class="k"><code class="ex">:CocList extensions</code></td><td class="d">встановлені розширення</td></tr>
+        <tr><td class="k"><code class="ex">:CocCommand clangd.switchSourceHeader</code></td><td class="d">стрибок <kbd>.c</kbd> ↔ <kbd>.h</kbd></td></tr>
+        <tr><td class="k"><code class="ex">:CocCommand clangd.symbolInfo</code></td><td class="d">інфо про символ під курсором</td></tr>
+      </table>
+    </section>
+
+    <section class="card cmd">
+      <h3><span class="dot"></span>Плагіни &amp; упкіп</h3>
+      <table>
+        <tr><td class="k"><code class="ex">:PlugInstall</code></td><td class="d">встановити нові плагіни</td></tr>
+        <tr><td class="k"><code class="ex">:PlugUpdate</code></td><td class="d">оновити плагіни</td></tr>
+        <tr><td class="k"><code class="ex">:CocUpdate</code></td><td class="d">оновити coc-розширення</td></tr>
+        <tr><td class="k"><code class="ex">compile_flags.txt</code></td><td class="d">для 1 файлу замість bear: по флагу на рядок</td></tr>
+      </table>
+    </section>
+
+  </div>
+
+  <footer>
+    <p class="stack">clangd <b>22.1.8</b> · coc-clangd · vim-plug · ThinkPad E15 · Gentoo</p>
+  </footer>
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeBtn');
+    var root = document.documentElement;
+    function sysDark() { return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches; }
+    try {
+      var saved = localStorage.getItem('vimc-theme');
+      if (saved === 'dark' || saved === 'light') root.setAttribute('data-theme', saved);
+    } catch (e) {}
+    btn.addEventListener('click', function () {
+      var cur = root.getAttribute('data-theme');
+      var isDark = cur ? cur === 'dark' : sysDark();
+      var next = isDark ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('vimc-theme', next); } catch (e) {}
+    });
+  })();
+</script>
+</body>
+</html>
