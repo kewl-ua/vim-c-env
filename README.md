@@ -1,5 +1,7 @@
 # vim-c-env — Vim as a C/C++ IDE with clangd
 
+**English** · [Українська](README.uk.md)
+
 ![Vim](https://img.shields.io/badge/Vim-019733?logo=vim&logoColor=white)
 ![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=black)
 ![clangd](https://img.shields.io/badge/clangd-LLVM-262D3A?logo=llvm&logoColor=white)
@@ -290,9 +292,9 @@ New-Item -ItemType Junction "$HOME\vimfiles\pack\vim-c-env\start\vim-c-env" `
   -Target (Get-Location) | Out-Null
 ```
 
-Open gVim and run `:PlugInstall`, `:CocInstall coc-clangd` and
-`:helptags ALL` (for `:Cheatsheet`). The config already has `has("win32")`
-branches for the shell and the gruvbox theme.
+Open gVim and run `:PlugInstall`, `:CocInstall coc-clangd coc-snippets` and
+`:helptags ALL` (for `:Cheatsheet`). The config already switches the shell to
+`cmd.exe` on Windows.
 
 ### <img src="https://cdn.simpleicons.org/apple/000000/FFFFFF" height="20" alt=""> macOS
 
@@ -327,7 +329,7 @@ Then clone and bootstrap as in [Then, on any distro](#then-on-any-distro).
 | Command | What it does |
 |---------|--------------|
 | `make` / `make help` | list the targets |
-| `make doctor` | check vim features, node, clangd, bear |
+| `make doctor` | check Vim features, Node, clangd, bear, gdb and Neovim |
 | `make install` | full bootstrap (`install.sh`) |
 | `make link` | only symlink the config files and the Vim package (no plugins) |
 | `make update` | `PlugUpdate` + `CocUpdate` |
@@ -351,11 +353,14 @@ Then clone and bootstrap as in [Then, on any distro](#then-on-any-distro).
 2. **vim-plug** is downloaded to `~/.vim/autoload/plug.vim` if missing.
 3. **Plugins** are installed headless (`PlugInstall`). The plugin directory is
    `~/.vimfiles/plugged` (set in `vimrc`).
-4. **coc-clangd** is installed as a coc extension; it starts the `clangd` it finds
-   on your `PATH`, with the flags from `coc-settings.json`.
+4. **coc-clangd** and **coc-snippets** are installed as coc extensions;
+   coc-clangd starts the `clangd` it finds on your `PATH`, with the flags from
+   `coc-settings.json`.
 5. **The repo itself** is linked as a Vim package
    (`~/.vim/pack/vim-c-env/start/vim-c-env`), so Vim loads `plugin/` (the
    `:Cheatsheet` command) and `doc/` (the help page) automatically.
+6. **Neovim**, if installed and not configured yet, gets
+   `~/.config/nvim/init.vim` linked to `nvim/init.vim`.
 
 clangd itself is a **system package** — the script does not touch it.
 
@@ -368,7 +373,7 @@ flowchart TD
     c -->|no| d["download plug.vim"]
     c -->|yes| e["PlugInstall (plugins)"]
     d --> e
-    e --> f["CocInstall coc-clangd"]
+    e --> f["CocInstall coc-clangd<br/>+ coc-snippets"]
     f --> g["ready to use"]
 ```
 
@@ -583,7 +588,7 @@ Inside Vim: **`:Cheatsheet`** or **`\?`** opens this reference as a help page
 | `ds"` | delete surrounding `"` |
 | `yss)` | wrap the whole line in `()` |
 
-**Commands:** `:Cheatsheet`, `:CocInfo`, `:CocList diagnostics`, `:CocList extensions`,
+**Commands:** `:Cheatsheet`, `:FormatOnSaveToggle`, `:Termdebug ./prog`, `:CocInfo`, `:CocList diagnostics`, `:CocList extensions`,
 `:CocCommand clangd.switchSourceHeader` (`.c` ↔ `.h`), `:PlugInstall`, `:PlugUpdate`.
 
 ---
@@ -883,11 +888,13 @@ vim-c-env/
 │   ├── Makefile          # build (via bear when present)
 │   └── .clang-format     # formatting style
 ├── README.md
+├── README.uk.md          # this README in Ukrainian
 └── LICENSE               # GNU GPL v3
 ```
 
 **Plugins** (vim-plug): coc.nvim, NERDTree, fzf + fzf.vim, vim-airline (+themes),
-gruvbox, nerdcommenter, vim-surround, vim-sensible.
+gruvbox, nerdcommenter, vim-surround, vim-sensible, vim-fugitive, vim-gitgutter.
+Built in: Termdebug. coc extensions: coc-clangd, coc-snippets.
 
 ---
 
@@ -947,7 +954,7 @@ debugger demo uses the Docker image when the local Vim lacks `+terminal`.
 ## Uninstall
 
 ```bash
-make uninstall     # removes only the symlinks: ~/.vimrc, ~/.vim/coc-settings.json, the Vim package
+make uninstall     # removes only our symlinks: ~/.vimrc, coc-settings.json, the Vim package, nvim init.vim
 ```
 
 Plugins in `~/.vimfiles/plugged`, vim-plug, and coc extensions stay — remove them

@@ -22,7 +22,7 @@ report() { # name, command
 # 1. Vim-side checks (see scripts/smoke.vim)
 coc_cmd=()
 [ -n "${COC_HOME:-}" ] && coc_cmd=(--cmd "let g:coc_config_home='$COC_HOME'")
-VCE_SMOKE_OUT="$OUT" vim -Nu "$VIMRC" "${coc_cmd[@]}" -Es \
+VCE_SMOKE_OUT="$OUT" vim -Nu "$VIMRC" ${coc_cmd[@]+"${coc_cmd[@]}"} -Es \
   -S "$REPO/scripts/smoke.vim" </dev/null >/dev/null 2>&1
 if [ -s "$OUT" ]; then
   cat "$OUT"
