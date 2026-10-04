@@ -5,7 +5,7 @@ VIM ?= vim
 PACKDIR := $(HOME)/.vim/pack/vim-c-env/start
 .DEFAULT_GOAL := help
 
-.PHONY: help install link update doctor cheatsheet example example-arm demos clean uninstall
+.PHONY: help install link update doctor cheatsheet example example-arm demos test clean uninstall
 
 help: ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -49,6 +49,9 @@ example: ## build the example C project (uses bear if present)
 
 example-arm: ## build the Cortex-M4 example (needs arm-none-eabi-gcc)
 	@$(MAKE) --no-print-directory -C example-arm
+
+test: ## smoke-test the installed setup (vim, coc, clangd, example)
+	@scripts/smoke-test.sh
 
 demos: ## re-record the README gifs (needs tmux, asciinema, agg)
 	@scripts/record-demos.sh

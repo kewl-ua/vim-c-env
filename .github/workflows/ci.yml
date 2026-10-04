@@ -1,0 +1,55 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: shellcheck install.sh scripts/*.sh
+      - name: vint (errors only)
+        run: |
+          pipx install vim-vint
+          pipx inject vim-vint 'setuptools<81'   # vint still imports pkg_resources
+          vint --error vimrc plugin/ scripts/smoke.vim
+      - name: help page fits in 78 columns
+        run: "! awk 'length > 78 { print FILENAME\":\"FNR\": \"$0; bad = 1 } END { exit !bad }' doc/vim-c-env.txt"
+      - name: help tags build cleanly
+        run: vim -Es -u NONE -c 'helptags doc' -c 'qa' </dev/null
+
+  install:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y vim-nox nodejs npm clangd bear gdb
+
+      - name: Dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install vim node llvm bear
+          echo "$(brew --prefix llvm)/bin" >> "$GITHUB_PATH"
+
+      - name: make doctor
+        run: make doctor
+
+      - name: make install
+        run: make install
+
+      - name: make test
+        run: make test

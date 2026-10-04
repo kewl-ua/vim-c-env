@@ -227,6 +227,8 @@ run() {
   esac
 }
 
-ALL="demo completion navigation hover diagnostics rename format files cheatsheet snippets build git debug doctor"
+ALL=(demo completion navigation hover diagnostics rename format files cheatsheet
+     snippets build git debug doctor)
+[ $# -eq 0 ] && set -- "${ALL[@]}"
 mkdir -p "$OUT"
-for name in ${@:-$ALL}; do run "$name"; done
+for name in "$@"; do run "$name"; done

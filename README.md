@@ -6,6 +6,7 @@
 ![coc.nvim](https://img.shields.io/badge/LSP-coc.nvim-8BC34A)
 ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A516-5FA04E?logo=nodedotjs&logoColor=white)
 ![Platforms](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey)
+[![CI](https://github.com/kewl-ua/vim-c-env/actions/workflows/ci.yml/badge.svg)](https://github.com/kewl-ua/vim-c-env/actions/workflows/ci.yml)
 [![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0-blue?logo=gnu&logoColor=white)](LICENSE)
 
 A ready-made **Vim setup for C and C++ development**: the **clangd** language
@@ -332,6 +333,7 @@ Then clone and bootstrap as in [Then, on any distro](#then-on-any-distro).
 | `make cheatsheet` | open `cheatsheet/index.html` in a browser |
 | `make example` | build the example C project |
 | `make example-arm` | build the Cortex-M4 example (needs `arm-none-eabi-gcc`) |
+| `make test` | smoke-test the installed setup: 18 checks on Vim, coc, clangd and the example |
 | `make demos` | re-record the README gifs ([details](#recording-the-demos)) |
 | `make clean` | remove the example build artifacts |
 | `make uninstall` | remove the symlinks this repo created |
@@ -858,7 +860,10 @@ vim-c-env/
 ├── install.sh            # bootstrap
 ├── Makefile              # convenience targets (install/update/doctor/...)
 ├── Dockerfile            # the whole environment in a container
+├── .github/workflows/    # CI (lint + install test) and Docker publishing
 ├── scripts/
+│   ├── smoke-test.sh     # make test: headless checks of the setup
+│   ├── smoke.vim         # the Vim-side half of those checks
 │   └── record-demos.sh   # re-records the README gifs (make demos)
 ├── _config.yml           # GitHub Pages / SEO settings
 ├── assets/               # demo gifs + social preview image
@@ -894,6 +899,19 @@ docker build -t vim-c-env .
 docker run --rm -it vim-c-env                         # opens example/main.c
 docker run --rm -it -v "$PWD":/work -w /work vim-c-env vim yourfile.c
 ```
+
+Each release tag (`v*`) also publishes the image to the GitHub Container
+Registry, after `make test` passes inside it:
+
+```bash
+docker run --rm -it ghcr.io/kewl-ua/vim-c-env
+```
+
+### Continuous integration
+
+[`ci.yml`](.github/workflows/ci.yml) runs on every push: shellcheck and vint,
+the help page layout, then a clean `make install` and `make test` on Ubuntu and
+macOS.
 
 ### Recording the demos
 
