@@ -9,15 +9,19 @@ in this repository.
 ==============================================================================
 CONTENTS                                                  *vim-c-env-contents*
 
-  1. Workflow ........................................... |vim-c-env-workflow|
-  2. Code navigation .................................. |vim-c-env-navigation|
-  3. Completion ....................................... |vim-c-env-completion|
-  4. Refactor and format ................................ |vim-c-env-refactor|
-  5. Files, search, edit ................................... |vim-c-env-files|
-  6. NERDTree ........................................... |vim-c-env-nerdtree|
-  7. Surround ........................................... |vim-c-env-surround|
-  8. Commands ........................................... |vim-c-env-commands|
-  9. Troubleshooting ..................................... |vim-c-env-trouble|
+   1. Workflow .......................................... |vim-c-env-workflow|
+   2. Code navigation ................................. |vim-c-env-navigation|
+   3. Completion ...................................... |vim-c-env-completion|
+   4. Snippets .......................................... |vim-c-env-snippets|
+   5. Refactor and format ............................... |vim-c-env-refactor|
+   6. Build and quickfix ................................... |vim-c-env-build|
+   7. Debugging ............................................ |vim-c-env-debug|
+   8. Git .................................................... |vim-c-env-git|
+   9. Files, search, edit .................................. |vim-c-env-files|
+  10. NERDTree .......................................... |vim-c-env-nerdtree|
+  11. Surround .......................................... |vim-c-env-surround|
+  12. Commands .......................................... |vim-c-env-commands|
+  13. Troubleshooting .................................... |vim-c-env-trouble|
 
 ==============================================================================
 1. WORKFLOW                                               *vim-c-env-workflow*
@@ -55,17 +59,79 @@ Re-run bear only when flags or the file list change.
 The menu opens by itself while you type.
 
 ==============================================================================
-4. REFACTOR AND FORMAT                                    *vim-c-env-refactor*
+4. SNIPPETS                                               *vim-c-env-snippets*
+
+Snippets appear in the completion menu. Accept one with <CR>, then jump
+between its placeholders:
+
+    <C-j>           Next placeholder.
+    <C-k>           Previous placeholder.
+
+Available in C files (UltiSnips/c.snippets):
+
+    main  mainargs  int main(void) / int main(int argc, char *argv[])
+    inc  Inc        #include <...> / #include "..."
+    guard           Include guard named after the file.
+    for  while      Loops.
+    if  ife         if / if-else.
+    sw              switch with case and default.
+    st  en          typedef struct / enum.
+    pr  epr         printf / fprintf(stderr, ...).
+    mal             malloc with a NULL check.
+
+==============================================================================
+5. REFACTOR AND FORMAT                                    *vim-c-env-refactor*
 
     \rn             Rename the symbol everywhere clangd can see it.
     \ca             Code action (quick-fix) at the cursor.
+    \h              Switch between foo.c and foo.h.
     \f              Format the file with clang-format.
     {Visual}\f      Format the selected lines.
 
-The formatting style comes from the nearest .clang-format file.
+The style comes from the nearest .clang-format file.
+:FormatOnSaveToggle formats C/C++ files on every :w (off by default).
 
 ==============================================================================
-5. FILES, SEARCH, EDIT                                       *vim-c-env-files*
+6. BUILD AND QUICKFIX                                        *vim-c-env-build*
+
+    \m              Run :make. Compiler errors open in the quickfix list.
+    ]q  [q          Next / previous error.
+    <CR>            In the quickfix list: jump to that error.
+    :cclose  :copen Close / reopen the quickfix list.
+
+==============================================================================
+7. DEBUGGING                                                 *vim-c-env-debug*
+
+Built-in Termdebug with gdb. Needs Vim built with +terminal (or Neovim)
+and a binary compiled with -g.
+>
+    \dd ./demo          start :Termdebug on ./demo
+<
+
+    \db  <F9>       Set a breakpoint on the cursor line.
+    \dx             Clear the breakpoint on the cursor line.
+    \dr             Run the program.
+    \dc  <F5>       Continue.
+    \dn  <F10>      Step over (next line).
+    \ds  <F11>      Step into.
+    \df             Finish the current function.
+    \de  K          Evaluate the expression under the cursor.
+
+Quit gdb with :Gdb, then "quit", or close the gdb window.
+
+==============================================================================
+8. GIT                                                         *vim-c-env-git*
+
+    \gg             Git status (fugitive). Stage with s, commit with cc.
+    \gb             Blame for the current file.
+    \gd             Diff the file against the index.
+    ]c  [c          Next / previous changed hunk.
+    \gp             Preview the hunk.
+    \gs             Stage the hunk.
+    \gu             Undo the hunk.
+
+==============================================================================
+9. FILES, SEARCH, EDIT                                       *vim-c-env-files*
 
     CTRL-N          Toggle the NERDTree file tree.
     :Files          Fuzzy-find files (fzf).
@@ -73,7 +139,7 @@ The formatting style comes from the nearest .clang-format file.
     \c<Space>       Toggle comment on the line or the selection.
 
 ==============================================================================
-6. NERDTREE                                               *vim-c-env-nerdtree*
+10. NERDTREE                                              *vim-c-env-nerdtree*
 
 Inside the tree opened with CTRL-N:
 
@@ -87,7 +153,7 @@ Inside the tree opened with CTRL-N:
     q               Close the tree.
 
 ==============================================================================
-7. SURROUND                                               *vim-c-env-surround*
+11. SURROUND                                              *vim-c-env-surround*
 
     ysiw"           Wrap the word under the cursor in double quotes.
     cs"'            Change the surrounding " to '.
@@ -95,22 +161,21 @@ Inside the tree opened with CTRL-N:
     yss)            Wrap the whole line in ().
 
 ==============================================================================
-8. COMMANDS                                               *vim-c-env-commands*
+12. COMMANDS                                              *vim-c-env-commands*
 
     :Cheatsheet         Open this page. Takes modifiers: :vert Cheatsheet,
                         :tab Cheatsheet.
+    :FormatOnSaveToggle Format C/C++ files on save, on or off.
     :CocInfo            coc status. Check that clangd is running.
     :CocList diagnostics
                         Every error and warning in a list.
     :CocList extensions Installed coc extensions.
-    :CocCommand clangd.switchSourceHeader
-                        Jump between foo.c and foo.h.
     :PlugInstall        Install plugins added to the vimrc.
     :PlugUpdate         Update plugins.
     :CocUpdate          Update coc extensions.
 
 ==============================================================================
-9. TROUBLESHOOTING                                         *vim-c-env-trouble*
+13. TROUBLESHOOTING                                        *vim-c-env-trouble*
 
     No completion       Run :CocInfo; clangd must be running.
                         Run :CocList extensions; coc-clangd must be listed.
@@ -119,6 +184,8 @@ Inside the tree opened with CTRL-N:
     Errors on #include  The project has no compile_commands.json or
                         compile_flags.txt. See |vim-c-env-workflow|.
     <Tab> inserts a tab The coc client is not running. Check :CocInfo.
+    \dd shows a warning Vim lacks +terminal. Install a full build (vim-nox,
+                        vim-gtk3, Gentoo USE=terminal) or use Neovim.
 
 Project page: https://github.com/kewl-ua/vim-c-env
 

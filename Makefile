@@ -36,6 +36,8 @@ doctor: ## check that required tools are present
 	@echo "node   : $$(command -v node   || echo MISSING) $$(node --version 2>/dev/null)"
 	@echo "clangd : $$(command -v clangd || echo MISSING) $$(clangd --version 2>/dev/null | head -1)"
 	@echo "bear   : $$(command -v bear   || echo 'MISSING (optional)')"
+	@echo "gdb    : $$(command -v gdb    || echo 'MISSING (optional, for debugging)')"
+	@$(VIM) --version 2>/dev/null | grep -q '+terminal' && echo "  +terminal ok (debugging)" || echo "  +terminal MISSING (optional, needed for :Termdebug)"
 
 cheatsheet: ## open the HTML cheatsheet in a browser
 	@xdg-open cheatsheet/index.html 2>/dev/null \

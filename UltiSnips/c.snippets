@@ -1,0 +1,101 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# C snippets for coc-snippets. They show up in the completion menu;
+# <CR> expands, <C-j>/<C-k> jump between placeholders.
+
+snippet main "int main(void)" b
+int main(void)
+{
+	${0}
+	return 0;
+}
+endsnippet
+
+snippet mainargs "int main(int argc, char *argv[])" b
+int main(int argc, char *argv[])
+{
+	${0}
+	return 0;
+}
+endsnippet
+
+snippet inc "#include <...>" b
+#include <${1:stdio}.h>
+endsnippet
+
+snippet Inc "#include \"...\"" b
+#include "${1:`!v expand('%:t:r')`}.h"
+endsnippet
+
+snippet guard "include guard" b
+#ifndef ${1:`!v toupper(substitute(expand('%:t'), '\W', '_', 'g'))`}
+#define $1
+
+${0}
+
+#endif /* $1 */
+endsnippet
+
+snippet for "for (i = 0; i < n; i++)" b
+for (${1:size_t} ${2:i} = 0; $2 < ${3:n}; $2++) {
+	${0}
+}
+endsnippet
+
+snippet while "while (cond)" b
+while (${1:cond}) {
+	${0}
+}
+endsnippet
+
+snippet if "if (cond)" b
+if (${1:cond}) {
+	${0}
+}
+endsnippet
+
+snippet ife "if (cond) ... else" b
+if (${1:cond}) {
+	${2}
+} else {
+	${0}
+}
+endsnippet
+
+snippet sw "switch (expr)" b
+switch (${1:expr}) {
+case ${2:value}:
+	${3}
+	break;
+default:
+	${0}
+	break;
+}
+endsnippet
+
+snippet st "typedef struct" b
+typedef struct {
+	${2}
+} ${1:name_t};
+endsnippet
+
+snippet en "typedef enum" b
+typedef enum {
+	${2:VALUE},
+} ${1:name_e};
+endsnippet
+
+snippet pr "printf(...)" w
+printf("${1:%s}\n"${2:, ${3:arg}});
+endsnippet
+
+snippet epr "fprintf(stderr, ...)" w
+fprintf(stderr, "${1:%s}\n"${2:, ${3:arg}});
+endsnippet
+
+snippet mal "malloc with a NULL check" b
+${1:type} *${2:p} = malloc(${3:n} * sizeof(*$2));
+if ($2 == NULL) {
+	perror("malloc");
+	${0:return -1;}
+}
+endsnippet

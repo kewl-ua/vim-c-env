@@ -30,8 +30,8 @@ fi
 echo ">> installing plugins (headless)"
 vim -Es -u "$HOME/.vimrc" -c 'PlugInstall --sync' -c 'qa' </dev/null || true
 
-echo ">> installing coc-clangd (headless)"
-vim -Es -u "$HOME/.vimrc" -c 'CocInstall -sync coc-clangd' -c 'qa' </dev/null || true
+echo ">> installing coc-clangd and coc-snippets (headless)"
+vim -Es -u "$HOME/.vimrc" -c 'CocInstall -sync coc-clangd coc-snippets' -c 'qa' </dev/null || true
 
 echo
 echo "Done. Make sure clangd is installed and on PATH:"

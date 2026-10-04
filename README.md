@@ -51,8 +51,15 @@ the gruvbox theme.
   code actions, formatting (clang-format).
 - **clang-tidy** enabled (static-analysis linter).
 - **Background index** of the project (fast navigation across the whole codebase).
+- **Snippets** for C (`main`, `for`, `guard`, `st`, `mal`, ...) via coc-snippets.
+- **Build from Vim:** `\m` runs `make`, compiler errors land in the quickfix list.
+- **Debugging** with gdb through Vim's built-in Termdebug: breakpoints, step,
+  evaluate, with IDE-style F5/F9/F10/F11 keys.
+- **Git:** fugitive (status, blame, diff) and gitgutter (changed-line signs, hunks).
+- **Format on save**, off by default, toggled with `:FormatOnSaveToggle`.
 - File explorer (NERDTree), fuzzy finder (fzf), status line (airline),
   commenting (nerdcommenter), surround editing (vim-surround).
+- **Cheatsheet inside Vim:** `:Cheatsheet` opens a native help page.
 - A single `./install.sh` (or `make install`) bootstraps everything from scratch.
 
 ---
@@ -143,6 +150,7 @@ actually understands C. clangd learns your build flags from
 | <img src="https://cdn.simpleicons.org/nodedotjs" height="14" alt=""> Node.js ≥ 16 | coc.nvim runtime | `node --version` |
 | <img src="https://cdn.simpleicons.org/llvm/262D3A/C9CDD6" height="14" alt=""> clangd | C/C++ language server | `clangd --version` |
 | bear *(optional)* | generates `compile_commands.json` from `make` | `bear --version` |
+| gdb *(optional)* | debugger behind `:Termdebug`; Vim also needs `+terminal` | `gdb --version` |
 | <img src="https://cdn.simpleicons.org/git" height="14" alt=""> git, <img src="https://cdn.simpleicons.org/curl/073551/7FB3D5" height="14" alt=""> curl | clone + download vim-plug | — |
 
 Check everything at once with **`make doctor`**. Per-OS setup is in
@@ -163,7 +171,7 @@ Prerequisites: Vim built with `+job`, Node.js, clangd, bear, git, curl.
 
 ```bash
 sudo apt update
-sudo apt install -y vim-nox nodejs npm clangd bear git curl
+sudo apt install -y vim-nox nodejs npm clangd bear gdb git curl
 ```
 
 Install `vim-nox` (or `vim-gtk3`). The minimal `vim-tiny` has no `+job`, and
@@ -172,7 +180,7 @@ coc.nvim needs it.
 #### <img src="https://cdn.simpleicons.org/fedora" height="18" alt=""> Fedora
 
 ```bash
-sudo dnf install -y vim-enhanced nodejs clang-tools-extra bear git curl
+sudo dnf install -y vim-enhanced nodejs clang-tools-extra bear gdb git curl
 ```
 
 clangd ships in `clang-tools-extra`.
@@ -180,20 +188,24 @@ clangd ships in `clang-tools-extra`.
 #### <img src="https://cdn.simpleicons.org/archlinux" height="18" alt=""> Arch Linux / Manjaro
 
 ```bash
-sudo pacman -S --needed vim nodejs clang bear git curl
+sudo pacman -S --needed vim nodejs clang bear gdb git curl
 ```
 
 #### <img src="https://cdn.simpleicons.org/opensuse" height="18" alt=""> openSUSE
 
 ```bash
-sudo zypper install -y vim nodejs clang-tools bear git curl
+sudo zypper install -y vim nodejs clang-tools bear gdb git curl
 ```
 
 #### <img src="https://cdn.simpleicons.org/gentoo/54487A/DDDAEC" height="18" alt=""> Gentoo
 
 ```bash
-sudo emerge -q app-editors/vim net-libs/nodejs llvm-core/clang dev-util/bear
+echo "app-editors/vim terminal" | sudo tee -a /etc/portage/package.use/vim
+sudo emerge -q app-editors/vim net-libs/nodejs llvm-core/clang dev-util/bear dev-debug/gdb
 ```
+
+The `terminal` USE flag gives Vim the `+terminal` feature that the debugger
+needs.
 
 #### Then, on any distro
 
@@ -424,7 +436,44 @@ Inside Vim: **`:Cheatsheet`** or **`\?`** opens this reference as a help page
 |-----|--------|
 | `\rn` | rename the symbol everywhere |
 | `\ca` | code action (quick-fix) |
+| `\h` | switch between `foo.c` and `foo.h` |
 | `\f` | format (clang-format) |
+| `:FormatOnSaveToggle` | format C/C++ files on every `:w` |
+
+**Snippets** (pick from the completion menu, then `Enter`)
+| Key / trigger | Action |
+|---------------|--------|
+| `main` `for` `if` `sw` `st` `guard` `pr` `mal` | expand a C snippet ([full list](UltiSnips/c.snippets)) |
+| `Ctrl-j` / `Ctrl-k` | next / previous placeholder |
+
+**Build and quickfix**
+| Key | Action |
+|-----|--------|
+| `\m` | run `:make`; errors open in the quickfix list |
+| `]q` / `[q` | next / previous error |
+| `Enter` (in quickfix) | jump to that error |
+
+**Debugging** (gdb via Termdebug; build with `-g`)
+| Key | Action |
+|-----|--------|
+| `\dd` | start: type the program, e.g. `\dd ./demo` |
+| `\db` / `F9` | breakpoint on the cursor line |
+| `\dx` | clear the breakpoint |
+| `\dr` | run |
+| `\dc` / `F5` | continue |
+| `\dn` / `F10` | step over |
+| `\ds` / `F11` | step into |
+| `\df` | finish the current function |
+| `\de` / `K` | evaluate the expression under the cursor |
+
+**Git**
+| Key | Action |
+|-----|--------|
+| `\gg` | status (fugitive): `s` stages, `cc` commits |
+| `\gb` | blame |
+| `\gd` | diff against the index |
+| `]c` / `[c` | next / previous changed hunk |
+| `\gp` / `\gs` / `\gu` | preview / stage / undo the hunk |
 
 **Files / search / edit**
 | Key / command | Action |
@@ -480,8 +529,9 @@ Inside Vim: **`:Cheatsheet`** or **`\?`** opens this reference as a help page
   (then `\rn` becomes `<Space>rn`, etc.).
 - **Add a plugin** — add a `Plug '...'` line between `plug#begin`/`plug#end` in
   `vimrc`, then `:PlugInstall` (or `make update`).
-- **gruvbox in the terminal too** — right now `colorscheme gruvbox` in `vimrc` is
-  inside `if has("win32")`; move it out of that block to use it on Linux too.
+- **Format on save by default** — add `let g:c_format_on_save = 1` before the
+  coc block in `vimrc`.
+- **Another color scheme** — replace `silent! colorscheme gruvbox` in `vimrc`.
 
 ---
 
@@ -533,6 +583,10 @@ set hlsearch
 
 set ttimeoutlen=50
 
+" Plugin options that must be set before the plugins load.
+let g:NERDCreateDefaultMappings = 0 " only \c<Space>; keeps \ca for coc
+let g:gitgutter_map_keys = 0        " own mappings under \g; keeps \h free
+
 call plug#begin('~/.vimfiles/plugged')
 Plug 'tpope/vim-sensible'           " sensible defaults
 Plug 'scrooloose/nerdtree'          " file explorer
@@ -544,15 +598,22 @@ Plug 'morhetz/gruvbox'              " color scheme
 Plug 'preservim/nerdcommenter'      " code commenting
 Plug 'tpope/vim-surround'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}  " LSP client (C/C++ via clangd)
+Plug 'tpope/vim-fugitive'           " git commands: :Git, blame, diff
+Plug 'airblade/vim-gitgutter'       " changed-line signs and hunk actions
 call plug#end()
 
+silent! colorscheme gruvbox         " silent: not installed yet on the first run
+
 map <C-n> :NERDTreeToggle<CR>
+
+" Commenting: toggle only (default nerdcommenter maps are off, see above)
+nmap <leader>c<Space> <Plug>NERDCommenterToggle
+xmap <leader>c<Space> <Plug>NERDCommenterToggle
 
 if has("win32")
     set shell=cmd.exe
     set shellcmdflag=/c
     set t_Co=256
-    colorscheme gruvbox
 endif
 
 if has("win64")
@@ -623,6 +684,68 @@ nmap <leader>f  <Plug>(coc-format)
 
 " Highlight all occurrences of the symbol under the cursor
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
+
+" --- Switch between foo.c and foo.h ---
+nnoremap <silent> <leader>h :CocCommand clangd.switchSourceHeader<CR>
+
+" --- Snippets (coc-snippets; snippet files live in UltiSnips/) ---
+let g:coc_snippet_next = '<C-j>'
+let g:coc_snippet_prev = '<C-k>'
+
+" --- Format on save: off by default, :FormatOnSaveToggle switches it ---
+let g:c_format_on_save = get(g:, 'c_format_on_save', 0)
+augroup c_format_on_save
+  autocmd!
+  autocmd BufWritePre *.c,*.h,*.cc,*.cpp,*.hpp
+        \ if g:c_format_on_save | silent! call CocAction('format') | endif
+augroup END
+command! FormatOnSaveToggle let g:c_format_on_save = !g:c_format_on_save
+      \ | echo 'format on save: ' . (g:c_format_on_save ? 'on' : 'off')
+
+" ============================================================
+" Build and quickfix
+" ============================================================
+" \m runs :make; compiler errors land in the quickfix window
+nnoremap <silent> <leader>m :silent make! <bar> redraw! <bar> cwindow<CR>
+nnoremap <silent> ]q :cnext<CR>
+nnoremap <silent> [q :cprevious<CR>
+
+" ============================================================
+" Git (fugitive + gitgutter)
+" ============================================================
+nnoremap <silent> <leader>gg :Git<CR>
+nnoremap <silent> <leader>gb :Git blame<CR>
+nnoremap <silent> <leader>gd :Gdiffsplit<CR>
+nmap <expr> ]c &diff ? ']c' : '<Plug>(GitGutterNextHunk)'
+nmap <expr> [c &diff ? '[c' : '<Plug>(GitGutterPrevHunk)'
+nmap <leader>gp <Plug>(GitGutterPreviewHunk)
+nmap <leader>gs <Plug>(GitGutterStageHunk)
+nmap <leader>gu <Plug>(GitGutterUndoHunk)
+
+" ============================================================
+" Debugging (built-in Termdebug + gdb)
+" ============================================================
+" Start with \dd and the program name, e.g. :Termdebug ./demo
+if has('terminal') || has('nvim')
+  packadd! termdebug
+  nnoremap <leader>dd :Termdebug<Space>
+else
+  " Vim 9.1's Termdebug fails without +terminal, so explain instead of erroring
+  nnoremap <leader>dd :echohl WarningMsg <bar> echo 'Debugging needs Vim built with +terminal (see README)' <bar> echohl None<CR>
+endif
+nnoremap <silent> <leader>dr :Run<CR>
+nnoremap <silent> <leader>db :Break<CR>
+nnoremap <silent> <leader>dx :Clear<CR>
+nnoremap <silent> <leader>dc :Continue<CR>
+nnoremap <silent> <leader>dn :Over<CR>
+nnoremap <silent> <leader>ds :Step<CR>
+nnoremap <silent> <leader>df :Finish<CR>
+nnoremap <silent> <leader>de :Evaluate<CR>
+nnoremap <silent> <F5>  :Continue<CR>
+nnoremap <silent> <F9>  :Break<CR>
+nnoremap <silent> <F10> :Over<CR>
+nnoremap <silent> <F11> :Step<CR>
 ```
 </details>
 
@@ -637,7 +760,8 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
     "--header-insertion=never",
     "--completion-style=detailed",
     "-j=4"
-  ]
+  ],
+  "snippets.ultisnips.pythonPrompt": false
 }
 ```
 </details>
@@ -652,6 +776,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 | `clangd: command not found` in `:CocInfo` | install clangd (see [Installation](#installation)) or add `"clangd.path"` to `coc-settings.json` |
 | Complains about `#include "my.h"` | no `compile_commands.json` / `compile_flags.txt` — see [C workflow](#c-workflow) |
 | `Tab` inserts a tab instead of completing | make sure the coc block in `vimrc` is present and the coc client is running (`:CocInfo`) |
+| `\dd` says Vim needs `+terminal` | Vim 9.1's Termdebug fails without it. Install a full build (`vim-nox`, `vim-gtk3`; Gentoo: `USE=terminal`) or use Neovim |
 | Nothing starts | `vim --version \| grep +job` must show `+job`; old Vim without `+job` can't run coc |
 
 ---
@@ -666,6 +791,8 @@ vim-c-env/
 ├── Makefile              # convenience targets (install/update/doctor/...)
 ├── _config.yml           # GitHub Pages / SEO settings
 ├── assets/               # demo gifs + social preview image
+├── UltiSnips/
+│   └── c.snippets        # C snippets for coc-snippets
 ├── doc/
 │   └── vim-c-env.txt     # cheatsheet as a Vim help page (:Cheatsheet)
 ├── plugin/

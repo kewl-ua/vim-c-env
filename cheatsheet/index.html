@@ -210,7 +210,56 @@
       <table>
         <tr><td class="k"><kbd>\rn</kbd></td><td class="d">rename symbol everywhere</td></tr>
         <tr><td class="k"><kbd>\ca</kbd></td><td class="d">code action (quick-fix)</td></tr>
+        <tr><td class="k"><kbd>\h</kbd></td><td class="d">switch <kbd>.c</kbd> ↔ <kbd>.h</kbd></td></tr>
         <tr><td class="k"><kbd>\f</kbd></td><td class="d">format (clang-format)</td></tr>
+        <tr><td class="k"><code class="ex">:FormatOnSaveToggle</code></td><td class="d">format on every <code class="ex">:w</code></td></tr>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3><span class="dot"></span>Build &amp; quickfix</h3>
+      <table>
+        <tr><td class="k"><kbd>\m</kbd></td><td class="d">run <code class="ex">:make</code>, errors to quickfix</td></tr>
+        <tr><td class="k"><kbd>]q</kbd> <span class="plus">/</span> <kbd>[q</kbd></td><td class="d">next / previous error</td></tr>
+        <tr><td class="k"><kbd>Enter</kbd></td><td class="d">in quickfix: jump to the error</td></tr>
+        <tr><td class="k"><code class="ex">:cclose</code></td><td class="d">close the quickfix list</td></tr>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3><span class="dot"></span>Debugging (gdb)</h3>
+      <table>
+        <tr><td class="k"><kbd>\dd</kbd></td><td class="d">start: <code class="ex">:Termdebug ./prog</code></td></tr>
+        <tr><td class="k"><kbd>\db</kbd> <span class="plus">/</span> <kbd>F9</kbd></td><td class="d">breakpoint on this line</td></tr>
+        <tr><td class="k"><kbd>\dx</kbd></td><td class="d">clear breakpoint</td></tr>
+        <tr><td class="k"><kbd>\dr</kbd></td><td class="d">run</td></tr>
+        <tr><td class="k"><kbd>\dc</kbd> <span class="plus">/</span> <kbd>F5</kbd></td><td class="d">continue</td></tr>
+        <tr><td class="k"><kbd>\dn</kbd> <span class="plus">/</span> <kbd>F10</kbd></td><td class="d">step over</td></tr>
+        <tr><td class="k"><kbd>\ds</kbd> <span class="plus">/</span> <kbd>F11</kbd></td><td class="d">step into</td></tr>
+        <tr><td class="k"><kbd>\df</kbd></td><td class="d">finish function</td></tr>
+        <tr><td class="k"><kbd>\de</kbd> <span class="plus">/</span> <kbd>K</kbd></td><td class="d">evaluate under cursor</td></tr>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3><span class="dot"></span>Git</h3>
+      <table>
+        <tr><td class="k"><kbd>\gg</kbd></td><td class="d">status (fugitive)</td></tr>
+        <tr><td class="k"><kbd>\gb</kbd></td><td class="d">blame</td></tr>
+        <tr><td class="k"><kbd>\gd</kbd></td><td class="d">diff against index</td></tr>
+        <tr><td class="k"><kbd>]c</kbd> <span class="plus">/</span> <kbd>[c</kbd></td><td class="d">next / previous hunk</td></tr>
+        <tr><td class="k"><kbd>\gp</kbd></td><td class="d">preview hunk</td></tr>
+        <tr><td class="k"><kbd>\gs</kbd> <span class="plus">/</span> <kbd>\gu</kbd></td><td class="d">stage / undo hunk</td></tr>
+      </table>
+    </section>
+
+    <section class="card">
+      <h3><span class="dot"></span>Snippets</h3>
+      <table>
+        <tr><td class="k"><code class="ex">main</code> <code class="ex">for</code> <code class="ex">if</code></td><td class="d">type, pick from menu, <kbd>Enter</kbd></td></tr>
+        <tr><td class="k"><kbd>Ctrl</kbd>+<kbd>j</kbd> <span class="plus">/</span> <kbd>Ctrl</kbd>+<kbd>k</kbd></td><td class="d">next / previous placeholder</td></tr>
+        <tr><td class="k"><code class="ex">guard</code> <code class="ex">st</code> <code class="ex">sw</code></td><td class="d">include guard, struct, switch</td></tr>
+        <tr><td class="k"><code class="ex">pr</code> <code class="ex">mal</code> <code class="ex">inc</code></td><td class="d">printf, checked malloc, #include</td></tr>
       </table>
     </section>
 

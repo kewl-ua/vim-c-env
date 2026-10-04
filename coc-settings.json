@@ -5,5 +5,6 @@
     "--header-insertion=never",
     "--completion-style=detailed",
     "-j=4"
-  ]
+  ],
+  "snippets.ultisnips.pythonPrompt": false
 }
