@@ -3,8 +3,8 @@
 
 #define GREETING "Hello from vim-env"
 
-// Наведи gd на project_t / banner нижче, K — для документації,
-// почни писати printf — випаде автодоповнення, \f — форматування.
+// Try gd on project_t / banner below, K for documentation,
+// start typing printf for completion, \f to format.
 typedef struct {
     const char *name;
     int         year;

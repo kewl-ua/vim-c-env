@@ -1,56 +1,56 @@
 # vim-env
 
-Моє повне середовище **Vim для розробки на C** — конфіг, bootstrap, приклад
-проєкту та візуальна шпаргалка в одному репозиторії.
+My complete **Vim environment for C development** — config, bootstrap, an example
+project, and a visual cheatsheet in one repository.
 
-Мовний сервер — **clangd** через **coc.nvim**; тема — **gruvbox**.
-VSCode-подібний досвід (автодоповнення, переходи, діагностики, рефакторинг),
-але у Vim і повністю локально.
-
----
-
-## Зміст
-
-- [Можливості](#можливості)
-- [Вимоги](#вимоги)
-- [Швидкий старт](#швидкий-старт)
-- [Таргети Makefile](#таргети-makefile)
-- [Як це влаштовано](#як-це-влаштовано)
-- [Робочий цикл C](#робочий-цикл-c)
-- [Приклад проєкту](#приклад-проєкту)
-- [Гарячі клавіші](#гарячі-клавіші)
-- [Налаштування під себе](#налаштування-під-себе)
-- [Траблшутинг](#траблшутинг)
-- [Структура репозиторію](#структура-репозиторію)
-- [Видалення](#видалення)
+Language server is **clangd** via **coc.nvim**; theme is **gruvbox**.
+A VSCode-like experience (completion, go-to, diagnostics, refactoring) inside
+Vim, fully local.
 
 ---
 
-## Можливості
+## Contents
 
-- **LSP для C/C++** через clangd: автодоповнення, `gd`/`gr`, hover, діагностики,
-  перейменування, code actions, форматування (clang-format).
-- **clang-tidy** увімкнено (лінтер статичного аналізу).
-- **Фоновий індекс** проєкту (швидкі переходи по всій кодовій базі).
-- Файловий менеджер (NERDTree), fuzzy-пошук (fzf), статусбар (airline),
-  коментування (nerdcommenter), робота з дужками/лапками (vim-surround).
-- Один `./install.sh` або `make install` піднімає все з нуля.
+- [Features](#features)
+- [Requirements](#requirements)
+- [Quick start](#quick-start)
+- [Makefile targets](#makefile-targets)
+- [How it works](#how-it-works)
+- [C workflow](#c-workflow)
+- [Example project](#example-project)
+- [Keybindings](#keybindings)
+- [Customizing](#customizing)
+- [Troubleshooting](#troubleshooting)
+- [Repository layout](#repository-layout)
+- [Uninstall](#uninstall)
 
 ---
 
-## Вимоги
+## Features
 
-| Інструмент | Навіщо | Перевірка |
-|------------|--------|-----------|
-| Vim 8.2+ з `+job +timers +channel` | async LSP | `vim --version \| grep +job` |
-| Node.js ≥ 16 | рушій coc.nvim | `node --version` |
-| clangd | мовний сервер C/C++ | `clangd --version` |
-| bear *(опційно)* | генерує `compile_commands.json` з `make` | `bear --version` |
-| git, curl | клон + завантаження vim-plug | — |
+- **C/C++ LSP** via clangd: completion, `gd`/`gr`, hover, diagnostics, rename,
+  code actions, formatting (clang-format).
+- **clang-tidy** enabled (static-analysis linter).
+- **Background index** of the project (fast navigation across the whole codebase).
+- File explorer (NERDTree), fuzzy finder (fzf), status line (airline),
+  commenting (nerdcommenter), surround editing (vim-surround).
+- A single `./install.sh` (or `make install`) bootstraps everything from scratch.
 
-Усе разом перевіряється командою **`make doctor`**.
+---
 
-Встановлення системних пакетів:
+## Requirements
+
+| Tool | Why | Check |
+|------|-----|-------|
+| Vim 8.2+ with `+job +timers +channel` | async LSP | `vim --version \| grep +job` |
+| Node.js ≥ 16 | coc.nvim runtime | `node --version` |
+| clangd | C/C++ language server | `clangd --version` |
+| bear *(optional)* | generates `compile_commands.json` from `make` | `bear --version` |
+| git, curl | clone + download vim-plug | — |
+
+Check everything at once with **`make doctor`**.
+
+Installing the system packages:
 
 ```bash
 # Gentoo
@@ -68,187 +68,189 @@ brew install llvm bear node
 
 ---
 
-## Швидкий старт
+## Quick start
 
 ```bash
-git clone <url-цього-репо> vim-env
-cd vim-env
-make doctor      # перевірити залежності
-make install     # симлінки + vim-plug + плагіни + coc-clangd
-make example     # зібрати приклад і згенерувати compile_commands.json
+git clone git@github.com:kewl-ua/vim-c-env.git vim-c-env
+cd vim-c-env
+make doctor      # check dependencies
+make install     # symlinks + vim-plug + plugins + coc-clangd
+make example     # build the example and generate compile_commands.json
 vim example/main.c
 ```
 
-> ⚠️ `install` перезапише `~/.vimrc` і `~/.vim/coc-settings.json`
-> **симлінками** на цей репозиторій. Збережи свої копії, якщо вони цінні
-> (`make uninstall` потім приберe лише ці симлінки).
+> ⚠️ `install` overwrites `~/.vimrc` and `~/.vim/coc-settings.json` with
+> **symlinks** into this repository. Back up your own copies if they matter
+> (`make uninstall` later removes only those symlinks).
 
 ---
 
-## Таргети Makefile
+## Makefile targets
 
-| Команда | Що робить |
-|---------|-----------|
-| `make` / `make help` | список таргетів |
-| `make doctor` | перевірити vim-фічі, node, clangd, bear |
-| `make install` | повний bootstrap (`install.sh`) |
-| `make link` | тільки симлінки конфігів (без плагінів) |
+| Command | What it does |
+|---------|--------------|
+| `make` / `make help` | list the targets |
+| `make doctor` | check vim features, node, clangd, bear |
+| `make install` | full bootstrap (`install.sh`) |
+| `make link` | only symlink the config files (no plugins) |
 | `make update` | `PlugUpdate` + `CocUpdate` |
-| `make cheatsheet` | відкрити `cheatsheet/index.html` у браузері |
-| `make example` | зібрати приклад C-проєкту |
-| `make clean` | прибрати артефакти прикладу |
-| `make uninstall` | прибрати створені симлінки |
+| `make cheatsheet` | open `cheatsheet/index.html` in a browser |
+| `make example` | build the example C project |
+| `make clean` | remove the example build artifacts |
+| `make uninstall` | remove the symlinks this repo created |
 
 ---
 
-## Як це влаштовано
+## How it works
 
-`install.sh` (або `make install`):
+`install.sh` (or `make install`):
 
-1. **Симлінки** `vimrc → ~/.vimrc` і `coc-settings.json → ~/.vim/coc-settings.json`.
-   Правиш файли в репо — зміни одразу діють; `git pull` оновлює конфіг.
-2. **vim-plug** завантажується в `~/.vim/autoload/plug.vim`, якщо його нема.
-3. **Плагіни** ставляться headless (`PlugInstall`). Каталог плагінів —
-   `~/.vimfiles/plugged` (заданий у `vimrc`).
-4. **coc-clangd** ставиться як coc-розширення; воно спілкується з clangd за
-   шляхом із `coc-settings.json`.
+1. **Symlinks** `vimrc → ~/.vimrc` and `coc-settings.json → ~/.vim/coc-settings.json`.
+   Edit the files in the repo and changes take effect immediately; `git pull`
+   updates the config.
+2. **vim-plug** is downloaded to `~/.vim/autoload/plug.vim` if missing.
+3. **Plugins** are installed headless (`PlugInstall`). The plugin directory is
+   `~/.vimfiles/plugged` (set in `vimrc`).
+4. **coc-clangd** is installed as a coc extension; it talks to clangd at the path
+   in `coc-settings.json`.
 
-clangd сам по собі — **системний пакет**, скрипт його не чіпає.
+clangd itself is a **system package** — the script does not touch it.
 
 ---
 
-## Робочий цикл C
+## C workflow
 
 ```bash
-cd <проєкт>
-bear -- make      # один раз, або коли змінились флаги / додались файли
-vim main.c        # clangd сам підхопить compile_commands.json
+cd <project>
+bear -- make      # once, or whenever flags / files change
+vim main.c        # clangd picks up compile_commands.json automatically
 ```
 
-- **Один файл** — `bear` не потрібен, clangd працює одразу з дефолтними флагами.
-- **Проєкт без `make`** — поклади `compile_flags.txt` у корінь, по флагу на рядок:
+- **Single file** — no `bear` needed, clangd works right away with default flags.
+- **Project without `make`** — drop a `compile_flags.txt` in the root, one flag
+  per line:
   ```
   -std=c11
   -Wall
   -Iinclude
   ```
-- **CMake** — додай `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON`, і він згенерує
-  `compile_commands.json` сам.
+- **CMake** — add `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` and it writes
+  `compile_commands.json` itself.
 
-Чому це треба: без списку флагів clangd не знає твоїх `-I`-інклудів і `-D`-дефайнів
-і буде лаятись на `#include` та макроси.
+Why it matters: without the flag list, clangd doesn't know your `-I` includes and
+`-D` defines, and will complain about `#include`s and macros.
 
 ---
 
-## Приклад проєкту
+## Example project
 
-`example/` — мінімальний C-проєкт, щоб одразу перевірити середовище:
+`example/` is a minimal C project to verify the environment right away:
 
 ```bash
 make example          # bear -- gcc ... → demo + compile_commands.json
 ./example/demo        # Hello from vim-env — vim-env (2026)
-vim example/main.c    # спробуй gd / K / \f / автодоповнення
+vim example/main.c    # try gd / K / \f / completion
 ```
 
-Там же лежить `.clang-format` — стиль, яким форматує `\f` (4 пробіли, 100 колонок).
+It also ships a `.clang-format` — the style `\f` applies (4 spaces, 100 columns).
 
 ---
 
-## Гарячі клавіші
+## Keybindings
 
-Повна візуальна версія — **`cheatsheet/index.html`** (`make cheatsheet`).
-Leader-клавіша — `\`.
+Full visual version — **`cheatsheet/index.html`** (`make cheatsheet`).
+Leader key is `\`.
 
-**Навігація**
-| Клавіша | Дія |
-|---------|-----|
-| `gd` / `gr` | до визначення / усі використання |
-| `gy` / `gi` | до типу / реалізації |
-| `K` | документація під курсором |
-| `]g` / `[g` | наступна / попередня помилка |
-| `Ctrl-o` / `Ctrl-i` | назад / вперед по стрибках |
+**Navigation**
+| Key | Action |
+|-----|--------|
+| `gd` / `gr` | go to definition / all references |
+| `gy` / `gi` | go to type / implementation |
+| `K` | documentation under the cursor |
+| `]g` / `[g` | next / previous diagnostic |
+| `Ctrl-o` / `Ctrl-i` | jump back / forward |
 
-**Автодоповнення**
-| Клавіша | Дія |
-|---------|-----|
-| `Tab` / `Shift-Tab` | вниз / вгору по списку |
-| `Enter` | підтвердити вибір |
-| `Ctrl-Space` | викликати вручну |
+**Completion**
+| Key | Action |
+|-----|--------|
+| `Tab` / `Shift-Tab` | down / up the list |
+| `Enter` | confirm the selection |
+| `Ctrl-Space` | trigger manually |
 
-**Рефакторинг / код**
-| Клавіша | Дія |
-|---------|-----|
-| `\rn` | перейменувати символ усюди |
+**Refactor / code**
+| Key | Action |
+|-----|--------|
+| `\rn` | rename the symbol everywhere |
 | `\ca` | code action (quick-fix) |
-| `\f` | форматувати (clang-format) |
+| `\f` | format (clang-format) |
 
-**Файли / пошук / правки**
-| Клавіша / команда | Дія |
-|-------------------|-----|
-| `Ctrl-n` | дерево файлів (NERDTree) |
-| `:Files` / `:Rg текст` | fuzzy-пошук файлів / по вмісту |
-| `\c<space>` | за/роз-коментувати |
-| `ysiw"` / `cs"'` / `ds"` | обгорнути / змінити / прибрати лапки |
+**Files / search / edit**
+| Key / command | Action |
+|---------------|--------|
+| `Ctrl-n` | file tree (NERDTree) |
+| `:Files` / `:Rg text` | fuzzy-find files / by content |
+| `\c<space>` | toggle comment |
+| `ysiw"` / `cs"'` / `ds"` | surround / change / delete quotes |
 
-**Команди:** `:CocInfo`, `:CocList diagnostics`, `:CocList extensions`,
+**Commands:** `:CocInfo`, `:CocList diagnostics`, `:CocList extensions`,
 `:CocCommand clangd.switchSourceHeader` (`.c` ↔ `.h`), `:PlugInstall`, `:PlugUpdate`.
 
 ---
 
-## Налаштування під себе
+## Customizing
 
-- **Інший шлях до clangd** — поправ `clangd.path` у `coc-settings.json`
-  (дізнатись шлях: `command -v clangd`).
-- **Прибрати clang-tidy або фоновий індекс** — прибери відповідний прапор зі
-  списку `clangd.arguments` у `coc-settings.json`.
-- **Leader на пробіл** — додай `let mapleader=" "` на початок `vimrc`
-  (тоді `\rn` стане `<Space>rn` і т.д.).
-- **Новий плагін** — додай рядок `Plug '...'` між `plug#begin`/`plug#end`
-  у `vimrc`, потім `:PlugInstall` (або `make update`).
-- **gruvbox і в терміналі** — зараз `colorscheme gruvbox` у `vimrc` увімкнено
-  лише під Windows; винеси рядок із `if has("win32")`, щоб діяв і на Linux.
-
----
-
-## Траблшутинг
-
-| Симптом | Причина / фікс |
-|---------|----------------|
-| Нема автодоповнення | `:CocInfo` — clangd має бути зелений; `:CocList extensions` — чи є coc-clangd |
-| `clangd: command not found` у `:CocInfo` | поправ `clangd.path` у `coc-settings.json` |
-| Лається на `#include "мій.h"` | нема `compile_commands.json`/`compile_flags.txt` — див. [Робочий цикл](#робочий-цикл-c) |
-| `Tab` вставляє таб, а не доповнення | перевір, що блок coc у `vimrc` на місці і coc-клієнт запущений (`:CocInfo`) |
-| Нічого не стартує | `vim --version \| grep +job` має бути `+job`; старий Vim без `+job` не потягне coc |
+- **Different clangd path** — edit `clangd.path` in `coc-settings.json`
+  (find it with `command -v clangd`).
+- **Drop clang-tidy or the background index** — remove the matching flag from
+  `clangd.arguments` in `coc-settings.json`.
+- **Leader on Space** — add `let mapleader=" "` at the top of `vimrc`
+  (then `\rn` becomes `<Space>rn`, etc.).
+- **Add a plugin** — add a `Plug '...'` line between `plug#begin`/`plug#end` in
+  `vimrc`, then `:PlugInstall` (or `make update`).
+- **gruvbox in the terminal too** — right now `colorscheme gruvbox` in `vimrc` is
+  inside `if has("win32")`; move it out of that block to use it on Linux too.
 
 ---
 
-## Структура репозиторію
+## Troubleshooting
+
+| Symptom | Cause / fix |
+|---------|-------------|
+| No completion | `:CocInfo` — clangd should be green; `:CocList extensions` — is coc-clangd there |
+| `clangd: command not found` in `:CocInfo` | fix `clangd.path` in `coc-settings.json` |
+| Complains about `#include "my.h"` | no `compile_commands.json` / `compile_flags.txt` — see [C workflow](#c-workflow) |
+| `Tab` inserts a tab instead of completing | make sure the coc block in `vimrc` is present and the coc client is running (`:CocInfo`) |
+| Nothing starts | `vim --version \| grep +job` must show `+job`; old Vim without `+job` can't run coc |
+
+---
+
+## Repository layout
 
 ```
-vim-env/
-├── vimrc                 # головний конфіг (→ ~/.vimrc)
-├── coc-settings.json     # налаштування coc/clangd (→ ~/.vim/coc-settings.json)
+vim-c-env/
+├── vimrc                 # main config (→ ~/.vimrc)
+├── coc-settings.json     # coc/clangd settings (→ ~/.vim/coc-settings.json)
 ├── install.sh            # bootstrap
-├── Makefile              # зручні таргети (install/update/doctor/...)
+├── Makefile              # convenience targets (install/update/doctor/...)
 ├── cheatsheet/
-│   └── index.html        # візуальна шпаргалка (gruvbox)
+│   └── index.html        # visual cheatsheet (gruvbox)
 ├── example/
-│   ├── main.c            # демо-проєкт
-│   ├── Makefile          # збірка (через bear, якщо є)
-│   └── .clang-format     # стиль форматування
+│   ├── main.c            # demo project
+│   ├── Makefile          # build (via bear when present)
+│   └── .clang-format     # formatting style
 └── README.md
 ```
 
-**Плагіни** (vim-plug): coc.nvim, NERDTree, fzf + fzf.vim, vim-airline (+themes),
+**Plugins** (vim-plug): coc.nvim, NERDTree, fzf + fzf.vim, vim-airline (+themes),
 gruvbox, nerdcommenter, vim-surround, vim-sensible.
 
 ---
 
-## Видалення
+## Uninstall
 
 ```bash
-make uninstall     # прибирає лише симлінки ~/.vimrc і ~/.vim/coc-settings.json
+make uninstall     # removes only the ~/.vimrc and ~/.vim/coc-settings.json symlinks
 ```
 
-Плагіни в `~/.vimfiles/plugged`, vim-plug і coc-розширення лишаються —
-за потреби прибери їх вручну.
+Plugins in `~/.vimfiles/plugged`, vim-plug, and coc extensions stay — remove them
+by hand if you want a clean slate.

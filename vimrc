@@ -38,16 +38,16 @@ set hlsearch
 set ttimeoutlen=50
 
 call plug#begin('~/.vimfiles/plugged')
-Plug 'tpope/vim-sensible'           " Базовые настройки
-Plug 'scrooloose/nerdtree'          " Файловый менеджер
-Plug 'vim-airline/vim-airline'      | " Статусная строка
-Plug 'vim-airline/vim-airline-themes' " Темы для airline
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | " Fuzzy findergG
+Plug 'tpope/vim-sensible'           " sensible defaults
+Plug 'scrooloose/nerdtree'          " file explorer
+Plug 'vim-airline/vim-airline'      | " status line
+Plug 'vim-airline/vim-airline-themes' " airline themes
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | " fuzzy finder
 Plug 'junegunn/fzf.vim'
-Plug 'morhetz/gruvbox'              " Цветовая схема
-Plug 'preservim/nerdcommenter'      " Комментирование кода
+Plug 'morhetz/gruvbox'              " color scheme
+Plug 'preservim/nerdcommenter'      " code commenting
 Plug 'tpope/vim-surround'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}  " LSP-клиент (C/C++ через clangd)
+Plug 'neoclide/coc.nvim', {'branch': 'release'}  " LSP client (C/C++ via clangd)
 call plug#end()
 
 map <C-n> :NERDTreeToggle<CR>
@@ -75,23 +75,23 @@ autocmd FileType typescript,javascript,typescriptreact,javascriptreact setlocal 
 filetype plugin indent on
 
 " ============================================================
-" coc.nvim — языковой сервер (для C/C++ работает clangd)
+" coc.nvim — language server (clangd for C/C++)
 " ============================================================
-set updatetime=300          " быстрее показываются диагностики
-set signcolumn=yes          " колонка для значков ошибок не прыгает
-set nowritebackup           " некоторые LSP ругаются на backup-файл
+set updatetime=300          " faster diagnostics
+set signcolumn=yes          " keep the sign column so the layout doesn't jump
+set nowritebackup           " some LSPs complain about the backup file
 
-" --- Автодополнение ---
-" Tab / Shift-Tab — навигация по popup, иначе обычный Tab
+" --- Completion ---
+" Tab / Shift-Tab navigate the popup, otherwise a normal Tab
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-" Enter подтверждает выбранный вариант
+" Enter confirms the selected item
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" Ctrl-Space — вызвать автодополнение вручную
+" Ctrl-Space triggers completion manually
 inoremap <silent><expr> <c-space> coc#refresh()
 
 function! CheckBackspace() abort
@@ -99,17 +99,17 @@ function! CheckBackspace() abort
   return !col || getline('.')[col - 1] =~# '\s'
 endfunction
 
-" --- Навигация по коду ---
+" --- Code navigation ---
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
-" --- Переход по ошибкам/предупреждениям ---
+" --- Jump between diagnostics ---
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-" --- K: показать документацию под курсором ---
+" --- K: show documentation under the cursor ---
 nnoremap <silent> K :call ShowDocumentation()<CR>
 function! ShowDocumentation()
   if CocAction('hasProvider', 'hover')
@@ -119,12 +119,12 @@ function! ShowDocumentation()
   endif
 endfunction
 
-" --- Рефакторинг / действия (leader = '\' по умолчанию) ---
+" --- Refactor / actions (leader = '\' by default) ---
 nmap <leader>rn <Plug>(coc-rename)
 nmap <leader>ca <Plug>(coc-codeaction-cursor)
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format)
 
-" Подсветка всех вхождений символа под курсором
+" Highlight all occurrences of the symbol under the cursor
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
