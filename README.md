@@ -6,6 +6,7 @@
 ![coc.nvim](https://img.shields.io/badge/LSP-coc.nvim-8BC34A)
 ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A516-5FA04E?logo=nodedotjs&logoColor=white)
 ![Platforms](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey)
+[![License: GPL v3](https://img.shields.io/badge/license-GPL--3.0-blue?logo=gnu&logoColor=white)](LICENSE)
 
 A ready-made **Vim setup for C and C++ development**: the **clangd** language
 server wired into Vim through **coc.nvim**, with autocompletion,
@@ -40,6 +41,7 @@ the gruvbox theme.
 - [Troubleshooting](#troubleshooting)
 - [Repository layout](#repository-layout)
 - [Uninstall](#uninstall)
+- [License](#license)
 
 ---
 
@@ -674,7 +676,8 @@ vim-c-env/
 │   ├── main.c            # demo project
 │   ├── Makefile          # build (via bear when present)
 │   └── .clang-format     # formatting style
-└── README.md
+├── README.md
+└── LICENSE               # GNU GPL v3
 ```
 
 **Plugins** (vim-plug): coc.nvim, NERDTree, fzf + fzf.vim, vim-airline (+themes),
@@ -690,3 +693,13 @@ make uninstall     # removes only the symlinks: ~/.vimrc, ~/.vim/coc-settings.js
 
 Plugins in `~/.vimfiles/plugged`, vim-plug, and coc extensions stay — remove them
 by hand if you want a clean slate.
+
+---
+
+## License
+
+Copyright (C) 2026 kewl-ua
+
+This project is free software: you can redistribute it and/or modify it under
+the terms of the **GNU General Public License v3.0** or (at your option) any
+later version. See [LICENSE](LICENSE) for the full text.

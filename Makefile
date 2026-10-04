@@ -1,4 +1,5 @@
-# vim-env — management targets.
+# SPDX-License-Identifier: GPL-3.0-or-later
+# vim-c-env — management targets.
 # Run `make` (or `make help`) to list them.
 VIM ?= vim
 PACKDIR := $(HOME)/.vim/pack/vim-c-env/start

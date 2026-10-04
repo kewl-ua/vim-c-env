@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Bootstrap this Vim environment:
 #   - symlink vimrc + coc-settings.json into place
 #   - install vim-plug, then the plugins, then coc-clangd

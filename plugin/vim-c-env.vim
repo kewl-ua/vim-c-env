@@ -1,3 +1,4 @@
+" SPDX-License-Identifier: GPL-3.0-or-later
 " vim-c-env: open the built-in cheatsheet (doc/vim-c-env.txt).
 "
 "   :Cheatsheet         open it in a split (like :help)
