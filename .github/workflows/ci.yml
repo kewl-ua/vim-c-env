@@ -37,12 +37,12 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y vim-nox nodejs npm clangd bear gdb
+          sudo apt-get install -y vim-nox neovim nodejs npm clangd bear gdb
 
       - name: Dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install vim node llvm bear
+          brew install vim neovim node llvm bear
           echo "$(brew --prefix llvm)/bin" >> "$GITHUB_PATH"
 
       - name: make doctor

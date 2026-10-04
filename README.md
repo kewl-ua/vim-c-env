@@ -42,6 +42,7 @@ the gruvbox theme.
 - [Full config](#full-config)
 - [Troubleshooting](#troubleshooting)
 - [Repository layout](#repository-layout)
+- [Neovim](#neovim)
 - [Docker](#docker)
 - [Uninstall](#uninstall)
 - [License](#license)
@@ -333,7 +334,7 @@ Then clone and bootstrap as in [Then, on any distro](#then-on-any-distro).
 | `make cheatsheet` | open `cheatsheet/index.html` in a browser |
 | `make example` | build the example C project |
 | `make example-arm` | build the Cortex-M4 example (needs `arm-none-eabi-gcc`) |
-| `make test` | smoke-test the installed setup: 18 checks on Vim, coc, clangd and the example |
+| `make test` | smoke-test the installed setup: Vim, Neovim, coc, clangd and the example |
 | `make demos` | re-record the README gifs ([details](#recording-the-demos)) |
 | `make clean` | remove the example build artifacts |
 | `make uninstall` | remove the symlinks this repo created |
@@ -856,6 +857,7 @@ nnoremap <silent> <F11> :Step<CR>
 ```
 vim-c-env/
 ├── vimrc                 # main config (→ ~/.vimrc)
+├── nvim/init.vim         # Neovim entry point (→ ~/.config/nvim/init.vim)
 ├── coc-settings.json     # coc/clangd settings (→ ~/.vim/coc-settings.json)
 ├── install.sh            # bootstrap
 ├── Makefile              # convenience targets (install/update/doctor/...)
@@ -886,6 +888,25 @@ vim-c-env/
 
 **Plugins** (vim-plug): coc.nvim, NERDTree, fzf + fzf.vim, vim-airline (+themes),
 gruvbox, nerdcommenter, vim-surround, vim-sensible.
+
+---
+
+## Neovim
+
+The same config runs in Neovim 0.8+ through [`nvim/init.vim`](nvim/init.vim).
+It loads this repo's `vimrc`, adds the repo to `runtimepath` (for
+`:Cheatsheet`, the help page and snippets), and points coc at the same
+`coc-settings.json`.
+
+`make install` links it to `~/.config/nvim/init.vim` only when you have no
+Neovim config yet. If you do, it leaves yours alone; add this line to it instead:
+
+```vim
+source ~/path/to/vim-c-env/nvim/init.vim
+```
+
+Neovim always has a built-in terminal, so the debugger works there even where
+Vim was built without `+terminal`. `make test` repeats the Vim checks in Neovim.
 
 ---
 

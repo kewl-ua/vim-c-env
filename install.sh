@@ -20,6 +20,17 @@ mkdir -p "$HOME/.vim/pack/vim-c-env/start"
 ln -sfn "$HERE" "$HOME/.vim/pack/vim-c-env/start/vim-c-env"
 vim -Es -u NONE -c "helptags $HERE/doc" -c 'qa' </dev/null || true
 
+if command -v nvim >/dev/null 2>&1; then
+  NVIM_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
+  if [ -L "$NVIM_DIR/init.vim" ] || { [ ! -e "$NVIM_DIR/init.vim" ] && [ ! -e "$NVIM_DIR/init.lua" ]; }; then
+    echo ">> linking the Neovim config"
+    mkdir -p "$NVIM_DIR"
+    ln -sfn "$HERE/nvim/init.vim" "$NVIM_DIR/init.vim"
+  else
+    echo ">> $NVIM_DIR already has a config; left alone (see README, Neovim)"
+  fi
+fi
+
 echo ">> installing vim-plug (if missing)"
 PLUG="$HOME/.vim/autoload/plug.vim"
 if [ ! -f "$PLUG" ]; then

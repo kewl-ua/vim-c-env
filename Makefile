@@ -3,6 +3,7 @@
 # Run `make` (or `make help`) to list them.
 VIM ?= vim
 PACKDIR := $(HOME)/.vim/pack/vim-c-env/start
+NVIMDIR := $(or $(XDG_CONFIG_HOME),$(HOME)/.config)/nvim
 .DEFAULT_GOAL := help
 
 .PHONY: help install link update doctor cheatsheet example example-arm demos test clean uninstall
@@ -21,6 +22,8 @@ link: ## only symlink vimrc + coc-settings.json into place
 	@mkdir -p "$(PACKDIR)"
 	@ln -sfn "$(CURDIR)" "$(PACKDIR)/vim-c-env"
 	@$(VIM) -Es -u NONE -c "helptags $(CURDIR)/doc" -c 'qa' </dev/null || true
+	@if command -v nvim >/dev/null && { [ -L "$(NVIMDIR)/init.vim" ] || { [ ! -e "$(NVIMDIR)/init.vim" ] && [ ! -e "$(NVIMDIR)/init.lua" ]; }; }; then \
+	  mkdir -p "$(NVIMDIR)" && ln -sfn "$(CURDIR)/nvim/init.vim" "$(NVIMDIR)/init.vim" && echo "linked $(NVIMDIR)/init.vim"; fi
 	@echo "linked ~/.vimrc, ~/.vim/coc-settings.json and the Vim package -> $(CURDIR)"
 
 update: ## update plugins (PlugUpdate) and coc extensions (CocUpdate)
@@ -37,6 +40,7 @@ doctor: ## check that required tools are present
 	@echo "clangd : $$(command -v clangd || echo MISSING) $$(clangd --version 2>/dev/null | head -1)"
 	@echo "bear   : $$(command -v bear   || echo 'MISSING (optional)')"
 	@echo "gdb    : $$(command -v gdb    || echo 'MISSING (optional, for debugging)')"
+	@echo "nvim   : $$(command -v nvim   || echo 'not installed (optional)') $$(nvim --version 2>/dev/null | head -1)"
 	@$(VIM) --version 2>/dev/null | grep -q '+terminal' && echo "  +terminal ok (debugging)" || echo "  +terminal MISSING (optional, needed for :Termdebug)"
 
 cheatsheet: ## open the HTML cheatsheet in a browser
@@ -67,3 +71,4 @@ uninstall: ## remove the symlinks this repo created (leaves plugins intact)
 	  else echo "~/.vim/coc-settings.json is not our symlink — left alone"; fi
 	@if [ -L "$(PACKDIR)/vim-c-env" ]; then rm -f "$(PACKDIR)/vim-c-env"; echo "removed the Vim package symlink"; \
 	  else echo "no Vim package symlink to remove"; fi
+	@if [ "$$(readlink "$(NVIMDIR)/init.vim" 2>/dev/null)" = "$(CURDIR)/nvim/init.vim" ]; then rm -f "$(NVIMDIR)/init.vim"; echo "removed the Neovim init.vim symlink"; fi
