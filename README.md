@@ -21,6 +21,7 @@ Vim, fully local.
 - [Example project](#example-project)
 - [Keybindings](#keybindings)
 - [Customizing](#customizing)
+- [Full config](#full-config)
 - [Troubleshooting](#troubleshooting)
 - [Repository layout](#repository-layout)
 - [Uninstall](#uninstall)
@@ -259,6 +260,35 @@ Leader key is `\`.
 | `\c<space>` | toggle comment |
 | `ysiw"` / `cs"'` / `ds"` | surround / change / delete quotes |
 
+**Inside NERDTree** (after `Ctrl-n`)
+| Key | Action |
+|-----|--------|
+| `o` / `Enter` | open file or expand directory |
+| `t` | open in a new tab |
+| `i` / `s` | open in a horizontal / vertical split |
+| `p` | jump to parent directory |
+| `R` | refresh the tree |
+| `m` | menu: create / delete / move / copy |
+| `I` | toggle hidden files |
+| `q` | close the tree |
+
+**Inside fzf** (`:Files`, `:Rg`)
+| Key | Action |
+|-----|--------|
+| `Enter` | open the selection |
+| `Ctrl-t` | open in a new tab |
+| `Ctrl-x` / `Ctrl-v` | open in a horizontal / vertical split |
+| `Tab` / `Shift-Tab` | multi-select (where supported) |
+| `Esc` | cancel |
+
+**Surround** (vim-surround), with the cursor on a word
+| Keys | Action |
+|------|--------|
+| `ysiw"` | wrap the word in `"` |
+| `cs"'` | change surrounding `"` to `'` |
+| `ds"` | delete surrounding `"` |
+| `yss)` | wrap the whole line in `()` |
+
 **Commands:** `:CocInfo`, `:CocList diagnostics`, `:CocList extensions`,
 `:CocCommand clangd.switchSourceHeader` (`.c` ↔ `.h`), `:PlugInstall`, `:PlugUpdate`.
 
@@ -276,6 +306,166 @@ Leader key is `\`.
   `vimrc`, then `:PlugInstall` (or `make update`).
 - **gruvbox in the terminal too** — right now `colorscheme gruvbox` in `vimrc` is
   inside `if has("win32")`; move it out of that block to use it on Linux too.
+
+---
+
+## Full config
+
+The complete config, for reference (the source of truth is the `vimrc` and
+`coc-settings.json` files in this repo).
+
+<details>
+<summary><strong>vimrc</strong></summary>
+
+```vim
+set number
+set relativenumber
+
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+set wildmenu
+set wildmode=list:longest
+
+syntax on
+set background=dark
+
+set mouse=a
+
+set autoread
+
+set hidden
+
+set scrolloff=3
+set wrap
+set linebreak
+set clipboard=unnamedplus
+
+set cursorline
+set showcmd
+set showmode
+set ruler
+
+set incsearch
+set hlsearch
+
+set ttimeoutlen=50
+
+call plug#begin('~/.vimfiles/plugged')
+Plug 'tpope/vim-sensible'           " sensible defaults
+Plug 'scrooloose/nerdtree'          " file explorer
+Plug 'vim-airline/vim-airline'      | " status line
+Plug 'vim-airline/vim-airline-themes' " airline themes
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } | " fuzzy finder
+Plug 'junegunn/fzf.vim'
+Plug 'morhetz/gruvbox'              " color scheme
+Plug 'preservim/nerdcommenter'      " code commenting
+Plug 'tpope/vim-surround'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}  " LSP client (C/C++ via clangd)
+call plug#end()
+
+map <C-n> :NERDTreeToggle<CR>
+
+if has("win32")
+    set shell=cmd.exe
+    set shellcmdflag=/c
+    set t_Co=256
+    colorscheme gruvbox
+endif
+
+if has("win64")
+    set shell=cmd.exe
+    set shellcmdflag=/c
+    set t_Co=256
+endif
+
+
+" Tab settings for certain file types
+autocmd FileType make setlocal noexpandtab softtabstop=0
+autocmd FileType typescript,javascript,typescriptreact,javascriptreact setlocal tabstop=2
+autocmd FileType typescript,javascript,typescriptreact,javascriptreact setlocal shiftwidth=2
+autocmd FileType typescript,javascript,typescriptreact,javascriptreact setlocal softtabstop=2
+
+filetype plugin indent on
+
+" ============================================================
+" coc.nvim — language server (clangd for C/C++)
+" ============================================================
+set updatetime=300          " faster diagnostics
+set signcolumn=yes          " keep the sign column so the layout doesn't jump
+set nowritebackup           " some LSPs complain about the backup file
+
+" --- Completion ---
+" Tab / Shift-Tab navigate the popup, otherwise a normal Tab
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+" Enter confirms the selected item
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+" Ctrl-Space triggers completion manually
+inoremap <silent><expr> <c-space> coc#refresh()
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1] =~# '\s'
+endfunction
+
+" --- Code navigation ---
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" --- Jump between diagnostics ---
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" --- K: show documentation under the cursor ---
+nnoremap <silent> K :call ShowDocumentation()<CR>
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" --- Refactor / actions (leader = '\' by default) ---
+nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>ca <Plug>(coc-codeaction-cursor)
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format)
+
+" Highlight all occurrences of the symbol under the cursor
+autocmd CursorHold * silent call CocActionAsync('highlight')
+```
+</details>
+
+<details>
+<summary><strong>coc-settings.json</strong></summary>
+
+```json
+{
+  "clangd.path": "/usr/lib/llvm/22/bin/clangd",
+  "clangd.arguments": [
+    "--background-index",
+    "--clang-tidy",
+    "--header-insertion=never",
+    "--completion-style=detailed",
+    "-j=4"
+  ]
+}
+```
+</details>
 
 ---
 
