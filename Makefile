@@ -5,7 +5,7 @@ VIM ?= vim
 PACKDIR := $(HOME)/.vim/pack/vim-c-env/start
 .DEFAULT_GOAL := help
 
-.PHONY: help install link update doctor cheatsheet example clean uninstall
+.PHONY: help install link update doctor cheatsheet example example-arm clean uninstall
 
 help: ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -47,8 +47,12 @@ cheatsheet: ## open the HTML cheatsheet in a browser
 example: ## build the example C project (uses bear if present)
 	@$(MAKE) --no-print-directory -C example
 
+example-arm: ## build the Cortex-M4 example (needs arm-none-eabi-gcc)
+	@$(MAKE) --no-print-directory -C example-arm
+
 clean: ## remove example build artifacts
 	@$(MAKE) --no-print-directory -C example clean
+	@$(MAKE) --no-print-directory -C example-arm clean
 
 uninstall: ## remove the symlinks this repo created (leaves plugins intact)
 	@if [ -L "$(HOME)/.vimrc" ]; then rm -f "$(HOME)/.vimrc"; echo "removed ~/.vimrc symlink"; \

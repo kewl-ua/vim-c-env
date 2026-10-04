@@ -1,5 +1,6 @@
 {
   "clangd.arguments": [
+    "--query-driver=**/arm-none-eabi-*",
     "--background-index",
     "--clang-tidy",
     "--header-insertion=never",

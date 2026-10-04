@@ -19,3 +19,7 @@ doc/tags
 # example build output
 example/demo
 example/compile_commands.json
+example-arm/*.o
+example-arm/blink.elf
+example-arm/blink.bin
+example-arm/compile_commands.json
