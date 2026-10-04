@@ -144,6 +144,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nnoremap <silent> <leader>h :CocCommand clangd.switchSourceHeader<CR>
 
 " --- Snippets (coc-snippets; snippet files live in UltiSnips/) ---
+imap <C-l> <Plug>(coc-snippets-expand)
 let g:coc_snippet_next = '<C-j>'
 let g:coc_snippet_prev = '<C-k>'
 

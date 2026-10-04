@@ -1,0 +1,9 @@
+.git
+.cache
+assets
+**/*.o
+**/compile_commands.json
+example/demo
+example-arm/blink.elf
+example-arm/blink.bin
+doc/tags

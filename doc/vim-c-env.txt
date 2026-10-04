@@ -61,9 +61,10 @@ The menu opens by itself while you type.
 ==============================================================================
 4. SNIPPETS                                               *vim-c-env-snippets*
 
-Snippets appear in the completion menu. Accept one with <CR>, then jump
-between its placeholders:
+Type a trigger and press <C-l> to expand it. Snippets also appear in the
+completion menu, where <CR> expands them. Then jump between placeholders:
 
+    <C-l>           Expand the snippet trigger before the cursor.
     <C-j>           Next placeholder.
     <C-k>           Previous placeholder.
 

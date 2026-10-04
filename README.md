@@ -41,6 +41,7 @@ the gruvbox theme.
 - [Full config](#full-config)
 - [Troubleshooting](#troubleshooting)
 - [Repository layout](#repository-layout)
+- [Docker](#docker)
 - [Uninstall](#uninstall)
 - [License](#license)
 
@@ -112,6 +113,35 @@ alone.
 on purpose.
 
 ![Formatting](assets/format.gif)
+
+### Snippets
+
+A whole program from snippet triggers: `inc`, `main`, `for` and `pr`, each
+expanded with `Ctrl-l`. `Ctrl-j` moves to the next placeholder.
+
+![Snippets](assets/snippets.gif)
+
+### Build and quickfix
+
+`\m` runs `make`. The compiler error lands in the quickfix list, `Enter` jumps
+to it, and a clean rebuild closes the list.
+
+![Build and quickfix](assets/build.gif)
+
+### Debugging
+
+`\dd ./demo` starts gdb inside Vim. A breakpoint (`\db`), run (`\dr`), step
+into (`\ds`), step over (`\dn`), evaluate (`\de`) and continue (`\dc`). Recorded
+in the Docker image, since Termdebug needs Vim with `+terminal`.
+
+![Debugging](assets/debug.gif)
+
+### Git
+
+gitgutter marks changed (`~`) and added (`+`) lines, `]c` walks the hunks, `\gp`
+previews one, and `\gg` opens fugitive's status.
+
+![Git](assets/git.gif)
 
 ### Cheatsheet inside Vim
 
@@ -302,6 +332,7 @@ Then clone and bootstrap as in [Then, on any distro](#then-on-any-distro).
 | `make cheatsheet` | open `cheatsheet/index.html` in a browser |
 | `make example` | build the example C project |
 | `make example-arm` | build the Cortex-M4 example (needs `arm-none-eabi-gcc`) |
+| `make demos` | re-record the README gifs ([details](#recording-the-demos)) |
 | `make clean` | remove the example build artifacts |
 | `make uninstall` | remove the symlinks this repo created |
 
@@ -474,10 +505,11 @@ Inside Vim: **`:Cheatsheet`** or **`\?`** opens this reference as a help page
 | `\f` | format (clang-format) |
 | `:FormatOnSaveToggle` | format C/C++ files on every `:w` |
 
-**Snippets** (pick from the completion menu, then `Enter`)
+**Snippets** (type a trigger, then `Ctrl-l`, or pick it from the completion menu)
 | Key / trigger | Action |
 |---------------|--------|
-| `main` `for` `if` `sw` `st` `guard` `pr` `mal` | expand a C snippet ([full list](UltiSnips/c.snippets)) |
+| `main` `for` `if` `sw` `st` `guard` `pr` `mal` | C snippet triggers ([full list](UltiSnips/c.snippets)) |
+| `Ctrl-l` | expand the trigger before the cursor |
 | `Ctrl-j` / `Ctrl-k` | next / previous placeholder |
 
 **Build and quickfix**
@@ -724,6 +756,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nnoremap <silent> <leader>h :CocCommand clangd.switchSourceHeader<CR>
 
 " --- Snippets (coc-snippets; snippet files live in UltiSnips/) ---
+imap <C-l> <Plug>(coc-snippets-expand)
 let g:coc_snippet_next = '<C-j>'
 let g:coc_snippet_prev = '<C-k>'
 
@@ -824,6 +857,9 @@ vim-c-env/
 ├── coc-settings.json     # coc/clangd settings (→ ~/.vim/coc-settings.json)
 ├── install.sh            # bootstrap
 ├── Makefile              # convenience targets (install/update/doctor/...)
+├── Dockerfile            # the whole environment in a container
+├── scripts/
+│   └── record-demos.sh   # re-records the README gifs (make demos)
 ├── _config.yml           # GitHub Pages / SEO settings
 ├── assets/               # demo gifs + social preview image
 ├── UltiSnips/
@@ -845,6 +881,27 @@ vim-c-env/
 
 **Plugins** (vim-plug): coc.nvim, NERDTree, fzf + fzf.vim, vim-airline (+themes),
 gruvbox, nerdcommenter, vim-surround, vim-sensible.
+
+---
+
+## Docker
+
+Try the whole environment without installing anything. The image has Vim with
+`+terminal` (so the debugger works), clangd, gdb, bear and the ARM toolchain.
+
+```bash
+docker build -t vim-c-env .
+docker run --rm -it vim-c-env                         # opens example/main.c
+docker run --rm -it -v "$PWD":/work -w /work vim-c-env vim yourfile.c
+```
+
+### Recording the demos
+
+Every gif in this README comes from `scripts/record-demos.sh` (`make demos`).
+It drives Vim through tmux with this repo's config, records with asciinema and
+renders with agg. It works on a scratch copy of `example/`, so the repo stays
+untouched. `scripts/record-demos.sh hover git` re-records only those two. The
+debugger demo uses the Docker image when the local Vim lacks `+terminal`.
 
 ---
 
