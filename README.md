@@ -1,4 +1,11 @@
-# vim-env
+# vim-c-env
+
+![Vim](https://img.shields.io/badge/Vim-019733?logo=vim&logoColor=white)
+![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=black)
+![clangd](https://img.shields.io/badge/clangd-LLVM-262D3A?logo=llvm&logoColor=white)
+![coc.nvim](https://img.shields.io/badge/LSP-coc.nvim-8BC34A)
+![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A516-5FA04E?logo=nodedotjs&logoColor=white)
+![Platforms](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey)
 
 My complete **Vim environment for C development** — config, bootstrap, an example
 project, and a visual cheatsheet in one repository.
@@ -7,7 +14,7 @@ Language server is **clangd** via **coc.nvim**; theme is **gruvbox**.
 A VSCode-like experience (completion, go-to, diagnostics, refactoring) inside
 Vim, fully local.
 
-![vim-env in action](assets/demo.gif)
+![vim-c-env in action](assets/demo.gif)
 
 *Go-to-definition, hover docs, completion and clang-format — all inside Vim.*
 
@@ -16,9 +23,10 @@ Vim, fully local.
 ## Contents
 
 - [Features](#features)
+- [In action](#in-action)
 - [Architecture](#architecture)
 - [Requirements](#requirements)
-- [Quick start](#quick-start)
+- [Installation](#installation)
 - [Makefile targets](#makefile-targets)
 - [How it works](#how-it-works)
 - [C workflow](#c-workflow)
@@ -41,6 +49,56 @@ Vim, fully local.
 - File explorer (NERDTree), fuzzy finder (fzf), status line (airline),
   commenting (nerdcommenter), surround editing (vim-surround).
 - A single `./install.sh` (or `make install`) bootstraps everything from scratch.
+
+---
+
+## In action
+
+All clips are recorded from the [example project](#example-project) with this
+exact config.
+
+### Completion
+
+Typing `self.` lists the struct members. clangd checks the half-written line
+straight away: a warning and an error show up in the sign column and the
+status line.
+
+![Completion](assets/completion.gif)
+
+### Go to definition and references
+
+`gd` jumps from the call to the definition, `Ctrl-o` jumps back, and `gr` finds
+every reference to the type.
+
+![Go to definition and references](assets/navigation.gif)
+
+### Hover documentation
+
+`K` shows the signature under the cursor, including libc functions such as
+`strlen` with their documentation.
+
+![Hover documentation](assets/hover.gif)
+
+### Diagnostics
+
+Errors are reported as you type. `]g` jumps to the next one and the message
+appears in a float.
+
+![Diagnostics](assets/diagnostics.gif)
+
+### Rename
+
+`\rn` renames a symbol in every place clangd knows about. Comments are left
+alone.
+
+![Rename](assets/rename.gif)
+
+### Formatting
+
+`\f` runs clang-format over the file, here after the indentation was scrambled
+on purpose.
+
+![Formatting](assets/format.gif)
 
 ---
 
@@ -68,46 +126,137 @@ actually understands C. clangd learns your build flags from
 
 | Tool | Why | Check |
 |------|-----|-------|
-| Vim 8.2+ with `+job +timers +channel` | async LSP | `vim --version \| grep +job` |
-| Node.js ≥ 16 | coc.nvim runtime | `node --version` |
-| clangd | C/C++ language server | `clangd --version` |
+| <img src="https://cdn.simpleicons.org/vim" height="14" alt=""> Vim 8.2+ with `+job +timers +channel` | async LSP | `vim --version \| grep +job` |
+| <img src="https://cdn.simpleicons.org/nodedotjs" height="14" alt=""> Node.js ≥ 16 | coc.nvim runtime | `node --version` |
+| <img src="https://cdn.simpleicons.org/llvm/262D3A/C9CDD6" height="14" alt=""> clangd | C/C++ language server | `clangd --version` |
 | bear *(optional)* | generates `compile_commands.json` from `make` | `bear --version` |
-| git, curl | clone + download vim-plug | — |
+| <img src="https://cdn.simpleicons.org/git" height="14" alt=""> git, <img src="https://cdn.simpleicons.org/curl/073551/7FB3D5" height="14" alt=""> curl | clone + download vim-plug | — |
 
-Check everything at once with **`make doctor`**.
-
-Installing the system packages:
-
-```bash
-# Gentoo
-sudo emerge llvm-core/clang dev-util/bear nodejs
-
-# Debian / Ubuntu
-sudo apt install clangd bear nodejs
-
-# Arch
-sudo pacman -S clang bear nodejs
-
-# macOS (Homebrew)
-brew install llvm bear node
-```
+Check everything at once with **`make doctor`**. Per-OS setup is in
+[Installation](#installation).
 
 ---
 
-## Quick start
+## Installation
+
+These steps assume a freshly installed OS. Install the prerequisites for your
+platform, then clone the repo and run the bootstrap.
+
+### <img src="https://cdn.simpleicons.org/linux" height="20" alt=""> Linux
+
+Prerequisites: Vim built with `+job`, Node.js, clangd, bear, git, curl.
+
+#### <img src="https://cdn.simpleicons.org/debian" height="18" alt=""> Debian / <img src="https://cdn.simpleicons.org/ubuntu" height="18" alt=""> Ubuntu
 
 ```bash
-git clone git@github.com:kewl-ua/vim-c-env.git vim-c-env
+sudo apt update
+sudo apt install -y vim-nox nodejs npm clangd bear git curl
+```
+
+Install `vim-nox` (or `vim-gtk3`). The minimal `vim-tiny` has no `+job`, and
+coc.nvim needs it.
+
+#### <img src="https://cdn.simpleicons.org/fedora" height="18" alt=""> Fedora
+
+```bash
+sudo dnf install -y vim-enhanced nodejs clang-tools-extra bear git curl
+```
+
+clangd ships in `clang-tools-extra`.
+
+#### <img src="https://cdn.simpleicons.org/archlinux" height="18" alt=""> Arch Linux / Manjaro
+
+```bash
+sudo pacman -S --needed vim nodejs clang bear git curl
+```
+
+#### <img src="https://cdn.simpleicons.org/opensuse" height="18" alt=""> openSUSE
+
+```bash
+sudo zypper install -y vim nodejs clang-tools bear git curl
+```
+
+#### <img src="https://cdn.simpleicons.org/gentoo/54487A/DDDAEC" height="18" alt=""> Gentoo
+
+```bash
+sudo emerge -q app-editors/vim net-libs/nodejs llvm-core/clang dev-util/bear
+```
+
+#### Then, on any distro
+
+```bash
+git clone git@github.com:kewl-ua/vim-c-env.git
 cd vim-c-env
-make doctor      # check dependencies
+make doctor      # verify that every tool is found
 make install     # symlinks + vim-plug + plugins + coc-clangd
-make example     # build the example and generate compile_commands.json
+make example     # optional: build the demo project
 vim example/main.c
 ```
 
-> ⚠️ `install` overwrites `~/.vimrc` and `~/.vim/coc-settings.json` with
-> **symlinks** into this repository. Back up your own copies if they matter
-> (`make uninstall` later removes only those symlinks).
+`make doctor` reports every prerequisite, and `make example` builds the demo
+through bear:
+
+![make doctor and make example](assets/doctor.gif)
+
+### <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/windows11/windows11-original.svg" height="20" alt=""> Windows
+
+#### Recommended: WSL2
+
+WSL2 runs a real Linux, so the Linux steps work unchanged. In an admin
+PowerShell:
+
+```powershell
+wsl --install -d Ubuntu
+```
+
+Reboot, open **Ubuntu** from the Start menu, then follow the **Debian / Ubuntu**
+steps above inside it.
+
+#### Native Windows (gVim)
+
+```powershell
+winget install vim.vim OpenJS.NodeJS LLVM.LLVM Git.Git
+```
+
+`install.sh` is a bash script and doesn't run on native Windows, so copy the
+files by hand. From the cloned repo, in PowerShell:
+
+```powershell
+copy vimrc "$HOME\_vimrc"
+New-Item -ItemType Directory "$HOME\vimfiles\autoload" -Force | Out-Null
+copy coc-settings.json "$HOME\vimfiles\coc-settings.json"
+iwr -useb https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim `
+  -OutFile "$HOME\vimfiles\autoload\plug.vim"
+```
+
+Open gVim and run `:PlugInstall`, then `:CocInstall coc-clangd`. The config
+already has `has("win32")` branches for the shell and the gruvbox theme.
+
+### <img src="https://cdn.simpleicons.org/apple/000000/FFFFFF" height="20" alt=""> macOS
+
+```bash
+xcode-select --install          # compilers and make
+brew install vim node llvm bear git
+```
+
+Homebrew keeps clangd inside the `llvm` keg, off the default `PATH`. Add it:
+
+```bash
+echo 'export PATH="$(brew --prefix llvm)/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+Then clone and bootstrap as in [Then, on any distro](#then-on-any-distro).
+
+### Notes
+
+> **Where clangd is found.** coc-clangd uses the `clangd` on your `PATH`. If
+> yours lives elsewhere, add `"clangd.path"` to `coc-settings.json` and set it
+> to the output of `command -v clangd`.
+
+> ⚠️ **Existing config.** `make install` replaces `~/.vimrc` and
+> `~/.vim/coc-settings.json` with **symlinks** into this repo. Back up your own
+> files first. `make uninstall` later removes only those symlinks.
 
 ---
 
@@ -137,8 +286,8 @@ vim example/main.c
 2. **vim-plug** is downloaded to `~/.vim/autoload/plug.vim` if missing.
 3. **Plugins** are installed headless (`PlugInstall`). The plugin directory is
    `~/.vimfiles/plugged` (set in `vimrc`).
-4. **coc-clangd** is installed as a coc extension; it talks to clangd at the path
-   in `coc-settings.json`.
+4. **coc-clangd** is installed as a coc extension; it starts the `clangd` it finds
+   on your `PATH`, with the flags from `coc-settings.json`.
 
 clangd itself is a **system package** — the script does not touch it.
 
@@ -276,6 +425,8 @@ Leader key is `\`.
 | `I` | toggle hidden files |
 | `q` | close the tree |
 
+![NERDTree](assets/files.gif)
+
 **Inside fzf** (`:Files`, `:Rg`)
 | Key | Action |
 |-----|--------|
@@ -300,8 +451,8 @@ Leader key is `\`.
 
 ## Customizing
 
-- **Different clangd path** — edit `clangd.path` in `coc-settings.json`
-  (find it with `command -v clangd`).
+- **Pin a specific clangd** — by default the one on `PATH` is used. To pin
+  another, add `"clangd.path": "/path/to/clangd"` to `coc-settings.json`.
 - **Drop clang-tidy or the background index** — remove the matching flag from
   `clangd.arguments` in `coc-settings.json`.
 - **Leader on Space** — add `let mapleader=" "` at the top of `vimrc`
@@ -459,7 +610,6 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 
 ```json
 {
-  "clangd.path": "/usr/lib/llvm/22/bin/clangd",
   "clangd.arguments": [
     "--background-index",
     "--clang-tidy",
@@ -478,7 +628,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 | Symptom | Cause / fix |
 |---------|-------------|
 | No completion | `:CocInfo` — clangd should be green; `:CocList extensions` — is coc-clangd there |
-| `clangd: command not found` in `:CocInfo` | fix `clangd.path` in `coc-settings.json` |
+| `clangd: command not found` in `:CocInfo` | install clangd (see [Installation](#installation)) or add `"clangd.path"` to `coc-settings.json` |
 | Complains about `#include "my.h"` | no `compile_commands.json` / `compile_flags.txt` — see [C workflow](#c-workflow) |
 | `Tab` inserts a tab instead of completing | make sure the coc block in `vimrc` is present and the coc client is running (`:CocInfo`) |
 | Nothing starts | `vim --version \| grep +job` must show `+job`; old Vim without `+job` can't run coc |
@@ -493,6 +643,7 @@ vim-c-env/
 ├── coc-settings.json     # coc/clangd settings (→ ~/.vim/coc-settings.json)
 ├── install.sh            # bootstrap
 ├── Makefile              # convenience targets (install/update/doctor/...)
+├── assets/               # demo gifs shown in this README
 ├── cheatsheet/
 │   └── index.html        # visual cheatsheet (gruvbox)
 ├── example/
