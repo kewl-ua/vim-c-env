@@ -1,0 +1,11 @@
+# Style used by clang-format (triggered in vim with \f).
+# Tweak freely — matches the 4-space / 100-col setup in vimrc.
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: false
+PointerAlignment: Right
+AlignConsecutiveDeclarations: true

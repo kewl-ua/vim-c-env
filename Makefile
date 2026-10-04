@@ -6,7 +6,7 @@ PACKDIR := $(HOME)/.vim/pack/vim-c-env/start
 NVIMDIR := $(or $(XDG_CONFIG_HOME),$(HOME)/.config)/nvim
 .DEFAULT_GOAL := help
 
-.PHONY: help install link update doctor cheatsheet example example-arm demos hero test clean uninstall
+.PHONY: help install link update doctor cheatsheet example example-arm example-unix demos hero test clean uninstall
 
 help: ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -40,6 +40,9 @@ doctor: ## check that required tools are present
 	@echo "clangd : $$(command -v clangd || echo MISSING) $$(clangd --version 2>/dev/null | head -1)"
 	@echo "bear   : $$(command -v bear   || echo 'MISSING (optional)')"
 	@echo "gdb    : $$(command -v gdb    || echo 'MISSING (optional, for debugging)')"
+	@echo "valgrind: $$(command -v valgrind || echo 'MISSING (optional, UNIX)')"
+	@echo "strace : $$(command -v strace || echo 'MISSING (optional, UNIX; dtruss on macOS)')"
+	@man -w 3 printf >/dev/null 2>&1 && echo "  C man pages ok (\\k)" || echo "  C man pages MISSING (optional, see docs/unix.md)"
 	@echo "nvim   : $$(command -v nvim   || echo 'not installed (optional)') $$(nvim --version 2>/dev/null | head -1)"
 	@$(VIM) --version 2>/dev/null | grep -q '+terminal' && echo "  +terminal ok (debugging)" || echo "  +terminal MISSING (optional, needed for :Termdebug)"
 
@@ -54,6 +57,9 @@ example: ## build the example C project (uses bear if present)
 example-arm: ## build the Cortex-M4 example (needs arm-none-eabi-gcc)
 	@$(MAKE) --no-print-directory -C example-arm
 
+example-unix: ## build and run the POSIX pipeline example
+	@$(MAKE) --no-print-directory -C example-unix run
+
 test: ## smoke-test the installed setup (vim, coc, clangd, example)
 	@scripts/smoke-test.sh
 
@@ -66,6 +72,7 @@ hero: ## regenerate assets/hero.gif and the social preview
 clean: ## remove example build artifacts
 	@$(MAKE) --no-print-directory -C example clean
 	@$(MAKE) --no-print-directory -C example-arm clean
+	@$(MAKE) --no-print-directory -C example-unix clean
 
 uninstall: ## remove the symlinks this repo created (leaves plugins intact)
 	@if [ -L "$(HOME)/.vimrc" ]; then rm -f "$(HOME)/.vimrc"; echo "removed ~/.vimrc symlink"; \

@@ -52,16 +52,33 @@ EXT="$HOME/.config/coc/extensions/node_modules"
 report "coc-clangd is installed" "[ -d '$EXT/coc-clangd' ]"
 report "coc-snippets is installed" "[ -d '$EXT/coc-snippets' ]"
 
-# 3. The example builds, runs, and clangd sees no errors in it
+# 3. The examples build, run, and clangd reports no diagnostics in them.
+# Only real diagnostics count ("E[...] [code] Line N: ..."): clangd --check
+# also self-tests its refactorings and some of those fail inside clangd itself.
+clangd_clean() { # dir file
+  local log diags
+  log="$(cd "$REPO/$1" && clangd --check="$2" 2>&1)"
+  diags="$(grep -E '^E\[[^]]*\] \[[a-z_]+\]' <<<"$log" | sed -E 's/^E\[[0-9:.]+\] //')"
+  if [ -z "$diags" ] && grep -q 'All checks completed' <<<"$log"; then
+    echo "ok   clangd: no diagnostics in $1/$2"
+  else
+    echo "FAIL clangd: diagnostics in $1/$2"
+    gh_error "clangd $1/$2: $(head -3 <<<"${diags:-clangd did not finish}" | tr '\n' ' ')"
+    fail=1
+  fi
+}
 report "example builds" "make -s -C '$REPO/example'"
 report "example runs" "'$REPO/example/demo' | grep -q 'Hello from'"
-CLANGD_LOG="$(cd "$REPO/example" && clangd --check=main.c 2>&1)"
-if grep -q 'All checks completed, 0 errors' <<<"$CLANGD_LOG"; then
-  echo "ok   clangd --check example/main.c: 0 errors"
+clangd_clean example main.c
+report "example-unix builds" "make -s -C '$REPO/example-unix'"
+report "example-unix pipes ls into wc" "'$REPO/example-unix/pipeline' echo cat >/dev/null"
+clangd_clean example-unix pipeline.c
+
+# 3b. C man pages, when man is installed (minimal containers ship without it)
+if command -v man >/dev/null 2>&1; then
+  report "man page printf(3) is installed" "man -w 3 printf"
 else
-  echo "FAIL clangd --check example/main.c"
-  gh_error "clangd: $(grep -E '^E\[|All checks' <<<"$CLANGD_LOG" | head -4 | tr '\n' ' ')"
-  fail=1
+  echo "skip man pages: man is not installed"
 fi
 
 # 4. Help page layout

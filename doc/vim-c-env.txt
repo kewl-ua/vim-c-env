@@ -45,6 +45,7 @@ Re-run bear only when flags or the file list change.
     gy              Go to type definition.
     gi              Go to implementation.
     K               Documentation for the symbol under the cursor.
+    \k              Man page for the word; C sections first (3, 2, 3p, 7).
     ]g  [g          Next / previous diagnostic.
     CTRL-O  CTRL-I  Jump back / forward.
 
@@ -79,6 +80,14 @@ Available in C files (UltiSnips/c.snippets):
     st  en          typedef struct / enum.
     pr  epr         printf / fprintf(stderr, ...).
     mal             malloc with a NULL check.
+
+UNIX and POSIX:
+
+    posix  die      POSIX feature macro / perror-and-exit helper.
+    fork  waitpid   fork with branches / wait for a child.
+    pipe  sigaction pipe(2) / install a signal handler.
+    getopt  getline Option loop / read a stream line by line.
+    tcpserver       TCP socket: bind and listen.
 
 ==============================================================================
 5. REFACTOR AND FORMAT                                    *vim-c-env-refactor*

@@ -13,6 +13,7 @@
 | `make update` | `PlugUpdate` + `CocUpdate` |
 | `make cheatsheet` | open `cheatsheet/index.html` in a browser |
 | `make example` | build the example C project |
+| `make example-unix` | build and run the POSIX pipeline example |
 | `make example-arm` | build the Cortex-M4 example (needs `arm-none-eabi-gcc`) |
 | `make test` | smoke-test the installed setup: Vim, Neovim, coc, clangd and the example |
 | `make hero` | regenerate the README's animated header and the social preview |
@@ -71,6 +72,7 @@ vim-c-env/
 ├── cheatsheet/
 │   └── index.html        # visual cheatsheet (gruvbox)
 ├── example-arm/          # bare-metal STM32F407 blink (Cortex-M4)
+├── example-unix/         # POSIX pipeline: fork, pipe, exec; asan/valgrind/strace targets
 ├── example/
 │   ├── main.c            # demo project
 │   ├── Makefile          # build (via bear when present)

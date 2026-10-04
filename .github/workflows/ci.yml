@@ -37,7 +37,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y vim-nox neovim nodejs npm clangd bear gdb
+          sudo apt-get install -y vim-nox neovim nodejs npm clangd bear gdb manpages-dev valgrind strace
 
       - name: Dependencies (macOS)
         if: runner.os == 'macOS'

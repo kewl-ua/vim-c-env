@@ -159,6 +159,35 @@ command! FormatOnSaveToggle let g:c_format_on_save = !g:c_format_on_save
       \ | echo 'format on save: ' . (g:c_format_on_save ? 'on' : 'off')
 
 " ============================================================
+" UNIX programming: man pages
+" ============================================================
+" \k opens the man page for the word under the cursor. C sections come first
+" (3 libc, 2 syscalls, 3p POSIX, 7 overviews), so printf opens printf(3),
+" not the shell command printf(1).
+if !has('nvim')
+  runtime ftplugin/man.vim
+endif
+function! s:CMan(word) abort
+  if !executable('man')
+    echohl WarningMsg | echo 'man is not installed' | echohl None
+    return
+  endif
+  for sec in ['3', '2', '3p', '7']
+    " Exact section only: "man 3 fork" would also accept fork.3am (GNU Awk).
+    " Compare the extension, not the name: waitpid resolves to wait.2.
+    for path in systemlist('man -w -a ' . sec . ' ' . shellescape(a:word) . ' 2>/dev/null')
+      let name = substitute(fnamemodify(path, ':t'), '\.\(gz\|bz2\|xz\|zst\|Z\)$', '', '')
+      if fnamemodify(name, ':e') ==# sec
+        execute 'Man ' . sec . ' ' . a:word
+        return
+      endif
+    endfor
+  endfor
+  echohl WarningMsg | echo 'No C man page for ' . a:word . ' (see docs/unix.md)' | echohl None
+endfunction
+nnoremap <silent> <leader>k :call <SID>CMan(expand('<cword>'))<CR>
+
+" ============================================================
 " Build and quickfix
 " ============================================================
 " \m runs :make; compiler errors land in the quickfix window

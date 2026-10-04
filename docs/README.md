@@ -8,6 +8,7 @@
 | [Features in action](features.md) | a gif for every feature |
 | [Keybindings](keybindings.md) | every mapping by topic (also `:Cheatsheet` inside Vim) |
 | [C workflow](c-workflow.md) | `compile_commands.json`, bear, CMake; the example project |
+| [UNIX programming](unix.md) | man pages with `\k`, POSIX flags, system-call snippets, sanitizers, Valgrind, strace |
 | [Embedded (ARM Cortex-M)](embedded.md) | STM32 example and clangd `--query-driver` |
 | [Customizing](customizing.md) | common tweaks and the full config |
 | [Troubleshooting](troubleshooting.md) | symptoms and fixes |

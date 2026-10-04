@@ -8,6 +8,7 @@
 | [Можливості в дії](features.md) | гіфка для кожної фічі |
 | [Гарячі клавіші](keybindings.md) | усі мапінги за темами (також `:Cheatsheet` у Vim) |
 | [Робочий цикл C](c-workflow.md) | `compile_commands.json`, bear, CMake; приклад проєкту |
+| [Програмування під UNIX](unix.md) | man-сторінки через `\k`, POSIX-прапорці, сніпети системних викликів, санітайзери, Valgrind, strace |
 | [Вбудовані системи (ARM Cortex-M)](embedded.md) | приклад для STM32 і `--query-driver` для clangd |
 | [Налаштування](customizing.md) | типові зміни і повний конфіг |
 | [Типові проблеми](troubleshooting.md) | симптоми та рішення |

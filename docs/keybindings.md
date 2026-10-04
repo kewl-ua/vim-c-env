@@ -12,6 +12,7 @@ Inside Vim: **`:Cheatsheet`** or **`\?`** opens this reference as a help page
 | `gd` / `gr` | go to definition / all references |
 | `gy` / `gi` | go to type / implementation |
 | `K` | documentation under the cursor |
+| `\k` | man page, C sections first ([details](unix.md#man-pages-k)) |
 | `]g` / `[g` | next / previous diagnostic |
 | `Ctrl-o` / `Ctrl-i` | jump back / forward |
 
@@ -35,6 +36,7 @@ Inside Vim: **`:Cheatsheet`** or **`\?`** opens this reference as a help page
 | Key / trigger | Action |
 |---------------|--------|
 | `main` `for` `if` `sw` `st` `guard` `pr` `mal` | C snippet triggers ([full list](../UltiSnips/c.snippets)) |
+| `fork` `pipe` `waitpid` `sigaction` `getopt` `tcpserver` | UNIX snippets ([details](unix.md#snippets)) |
 | `Ctrl-l` | expand the trigger before the cursor |
 | `Ctrl-j` / `Ctrl-k` | next / previous placeholder |
 

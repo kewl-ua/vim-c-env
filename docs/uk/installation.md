@@ -66,6 +66,9 @@ sudo emerge -q app-editors/vim net-libs/nodejs llvm-core/clang dev-util/bear dev
 
 USE-прапорець `terminal` дає Vim можливість `+terminal`, потрібну дебагеру.
 
+Для системного програмування під UNIX (man-сторінки, Valgrind, strace) див.
+додаткові пакети в розділі [Програмування під UNIX](unix.md#що-встановити).
+
 #### Далі, на будь-якому дистрибутиві
 
 ```bash

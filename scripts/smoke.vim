@@ -17,6 +17,8 @@ call s:Check('\c<Space> toggles comments', maparg('\c<Space>', 'n') =~# 'NERDCom
 call s:Check('\h switches source/header', maparg('\h', 'n') =~# 'switchSourceHeader')
 call s:Check('\m runs make', maparg('\m', 'n') =~# 'make')
 call s:Check('<C-l> expands snippets', maparg('<C-l>', 'i') =~# 'coc-snippets-expand')
+call s:Check('\k opens C man pages', maparg('\k', 'n') =~# 'CMan')
+call s:Check(':Man exists', exists(':Man') == 2)
 
 try
   help vim-c-env-debug

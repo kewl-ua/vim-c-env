@@ -27,6 +27,8 @@ Neovim and Docker.
 - **Build** with `make` from Vim; errors land in the quickfix list.
 - **Debug** with gdb in Vim's Termdebug, with F5/F9/F10/F11 keys.
 - **Git** status, blame, diff and per-hunk staging.
+- **UNIX programming:** `\k` opens the right man page; POSIX snippets; an example
+  set up for sanitizers, Valgrind and strace.
 - **Embedded:** clangd sees the `arm-none-eabi` toolchain; an STM32 example is included.
 - **Cheatsheet inside Vim:** `:Cheatsheet`.
 
@@ -62,6 +64,7 @@ Leader is `\`. All keys: [Keybindings](docs/keybindings.md), or `:Cheatsheet` in
 | `Ctrl-l` | expand snippet | `\m` | make, errors to quickfix |
 | `\dd ./prog` | start the debugger | `F9` / `F10` / `F11` | break / over / into |
 | `Ctrl-n` | file tree | `\gg` | git status |
+| `\k` | man page (C sections first) | `:Cheatsheet` | all keys inside Vim |
 
 ## Documentation
 
@@ -71,6 +74,7 @@ Leader is `\`. All keys: [Keybindings](docs/keybindings.md), or `:Cheatsheet` in
 | [Features in action](docs/features.md) | a gif for every feature |
 | [Keybindings](docs/keybindings.md) | every mapping by topic |
 | [C workflow](docs/c-workflow.md) | `compile_commands.json`, bear, CMake; the example |
+| [UNIX programming](docs/unix.md) | man pages, POSIX flags, sanitizers, Valgrind, strace |
 | [Embedded (ARM Cortex-M)](docs/embedded.md) | STM32 example, clangd `--query-driver` |
 | [Customizing](docs/customizing.md) | common tweaks and the full config |
 | [Troubleshooting](docs/troubleshooting.md) | symptoms and fixes |

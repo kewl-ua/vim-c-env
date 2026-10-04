@@ -67,6 +67,9 @@ sudo emerge -q app-editors/vim net-libs/nodejs llvm-core/clang dev-util/bear dev
 The `terminal` USE flag gives Vim the `+terminal` feature that the debugger
 needs.
 
+For UNIX system programming (man pages, Valgrind, strace) see the extra
+packages in [UNIX programming](unix.md#tools-to-install).
+
 #### Then, on any distro
 
 ```bash
