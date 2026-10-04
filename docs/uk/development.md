@@ -15,6 +15,7 @@
 | `make example` | збирає приклад на C |
 | `make example-arm` | збирає приклад для Cortex-M4 (потрібен `arm-none-eabi-gcc`) |
 | `make test` | smoke-тест встановленого середовища: Vim, Neovim, coc, clangd і приклад |
+| `make hero` | перегенерує анімовану шапку README і превʼю для соцмереж |
 | `make demos` | перезнімає гіфки README ([деталі](#запис-демо)) |
 | `make clean` | прибирає артефакти збірки прикладів |
 | `make uninstall` | прибирає створені репозиторієм симлінки |
@@ -38,6 +39,10 @@ Ubuntu та macOS.
 перезнімає лише ці дві. Демо дебагера записується в Docker-образі, якщо
 локальний Vim не має `+terminal`.
 
+Анімовану шапку README малює `scripts/make-hero.py` (`make hero`): кожен кадр —
+SVG, відрендерений через rsvg-convert, а gif збирає ffmpeg. Останній кадр стає
+`assets/social-preview.png`.
+
 ---
 
 ## Структура репозиторію
@@ -54,7 +59,8 @@ vim-c-env/
 ├── scripts/
 │   ├── smoke-test.sh     # make test: headless checks of the setup
 │   ├── smoke.vim         # the Vim-side half of those checks
-│   └── record-demos.sh   # re-records the README gifs (make demos)
+│   ├── record-demos.sh   # re-records the README gifs (make demos)
+│   └── make-hero.py      # animated README header + social preview (make hero)
 ├── _config.yml           # GitHub Pages / SEO settings
 ├── assets/               # demo gifs + social preview image
 ├── UltiSnips/

@@ -16,7 +16,7 @@
 **gdb** і git. Встановлюється однією командою на Linux, macOS або Windows,
 працює також у Neovim і Docker.
 
-![Vim з clangd: перехід до визначення, документація, доповнення і clang-format](assets/demo.gif)
+![vim-c-env: Vim у центрі, навколо clangd, coc.nvim, сніпети, збірка, дебагер, git, файли, Neovim, Docker і ARM](assets/hero.gif)
 
 ## Можливості
 
@@ -30,7 +30,11 @@
 - **Вбудовані системи:** clangd бачить тулчейн `arm-none-eabi`; є приклад для STM32.
 - **Шпаргалка всередині Vim:** `:Cheatsheet`.
 
-Кожну фічу показано гіфкою на сторінці [Можливості в дії](docs/uk/features.md).
+Так це виглядає в роботі:
+
+![Vim з clangd: перехід до визначення, документація, доповнення і clang-format](assets/demo.gif)
+
+Кожну фічу показано окремою гіфкою на сторінці [Можливості в дії](docs/uk/features.md).
 
 ## Швидкий старт
 

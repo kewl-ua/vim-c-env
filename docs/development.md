@@ -15,6 +15,7 @@
 | `make example` | build the example C project |
 | `make example-arm` | build the Cortex-M4 example (needs `arm-none-eabi-gcc`) |
 | `make test` | smoke-test the installed setup: Vim, Neovim, coc, clangd and the example |
+| `make hero` | regenerate the README's animated header and the social preview |
 | `make demos` | re-record the README gifs ([details](#recording-the-demos)) |
 | `make clean` | remove the example build artifacts |
 | `make uninstall` | remove the symlinks this repo created |
@@ -37,6 +38,10 @@ renders with agg. It works on a scratch copy of `example/`, so the repo stays
 untouched. `scripts/record-demos.sh hover git` re-records only those two. The
 debugger demo uses the Docker image when the local Vim lacks `+terminal`.
 
+The animated header at the top of the README is drawn by `scripts/make-hero.py`
+(`make hero`): each frame is an SVG rendered with rsvg-convert, then ffmpeg builds
+the gif. Its last frame becomes `assets/social-preview.png`.
+
 ---
 
 ## Repository layout
@@ -53,7 +58,8 @@ vim-c-env/
 ├── scripts/
 │   ├── smoke-test.sh     # make test: headless checks of the setup
 │   ├── smoke.vim         # the Vim-side half of those checks
-│   └── record-demos.sh   # re-records the README gifs (make demos)
+│   ├── record-demos.sh   # re-records the README gifs (make demos)
+│   └── make-hero.py      # animated README header + social preview (make hero)
 ├── _config.yml           # GitHub Pages / SEO settings
 ├── assets/               # demo gifs + social preview image
 ├── UltiSnips/

@@ -6,7 +6,7 @@ PACKDIR := $(HOME)/.vim/pack/vim-c-env/start
 NVIMDIR := $(or $(XDG_CONFIG_HOME),$(HOME)/.config)/nvim
 .DEFAULT_GOAL := help
 
-.PHONY: help install link update doctor cheatsheet example example-arm demos test clean uninstall
+.PHONY: help install link update doctor cheatsheet example example-arm demos hero test clean uninstall
 
 help: ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -59,6 +59,9 @@ test: ## smoke-test the installed setup (vim, coc, clangd, example)
 
 demos: ## re-record the README gifs (needs tmux, asciinema, agg)
 	@scripts/record-demos.sh
+
+hero: ## regenerate assets/hero.gif and the social preview
+	@scripts/make-hero.py
 
 clean: ## remove example build artifacts
 	@$(MAKE) --no-print-directory -C example clean

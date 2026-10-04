@@ -16,7 +16,7 @@ in through **coc.nvim**, plus snippets, builds into quickfix, **gdb** debugging
 and git. One command installs it on Linux, macOS or Windows; it also runs in
 Neovim and Docker.
 
-![Vim with clangd: go-to-definition, hover, completion and clang-format](assets/demo.gif)
+![vim-c-env: Vim in the centre with clangd, coc.nvim, snippets, build, debugger, git, files, Neovim, Docker and ARM support around it](assets/hero.gif)
 
 ## Features
 
@@ -30,7 +30,11 @@ Neovim and Docker.
 - **Embedded:** clangd sees the `arm-none-eabi` toolchain; an STM32 example is included.
 - **Cheatsheet inside Vim:** `:Cheatsheet`.
 
-See every feature as a gif in [Features in action](docs/features.md).
+In a real session:
+
+![Vim with clangd: go-to-definition, hover, completion and clang-format](assets/demo.gif)
+
+Every feature has its own gif in [Features in action](docs/features.md).
 
 ## Quick start
 
