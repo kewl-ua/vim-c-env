@@ -7,6 +7,10 @@ Language server is **clangd** via **coc.nvim**; theme is **gruvbox**.
 A VSCode-like experience (completion, go-to, diagnostics, refactoring) inside
 Vim, fully local.
 
+![vim-env in action](assets/demo.gif)
+
+*Go-to-definition, hover docs, completion and clang-format — all inside Vim.*
+
 ---
 
 ## Contents
