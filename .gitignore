@@ -9,3 +9,10 @@ desktop.ini
 *~
 .vscode/
 .idea/
+
+# clangd index cache
+.cache/
+
+# example build output
+example/demo
+example/compile_commands.json
