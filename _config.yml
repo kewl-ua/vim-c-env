@@ -1,0 +1,22 @@
+# GitHub Pages: README.md becomes the site index, cheatsheet/ is served as-is.
+title: vim-c-env
+description: >-
+  Vim as a C/C++ IDE: clangd LSP via coc.nvim with autocompletion,
+  go-to-definition, diagnostics, rename and clang-format. One-command install
+  for Linux, macOS and Windows.
+url: https://kewl-ua.github.io
+baseurl: /vim-c-env
+lang: en
+image: /assets/social-preview.png
+author: kewl-ua
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+exclude:
+  - example
+  - install.sh
+  - Makefile
+  - vimrc
+  - coc-settings.json

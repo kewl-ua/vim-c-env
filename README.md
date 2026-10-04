@@ -1,4 +1,4 @@
-# vim-c-env
+# vim-c-env — Vim as a C/C++ IDE with clangd
 
 ![Vim](https://img.shields.io/badge/Vim-019733?logo=vim&logoColor=white)
 ![C](https://img.shields.io/badge/C-A8B9CC?logo=c&logoColor=black)
@@ -7,16 +7,19 @@
 ![Node.js](https://img.shields.io/badge/Node.js-%E2%89%A516-5FA04E?logo=nodedotjs&logoColor=white)
 ![Platforms](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-lightgrey)
 
-My complete **Vim environment for C development** — config, bootstrap, an example
-project, and a visual cheatsheet in one repository.
+A ready-made **Vim setup for C and C++ development**: the **clangd** language
+server wired into Vim through **coc.nvim**, with autocompletion,
+go-to-definition, find references, hover documentation, live diagnostics,
+rename, and **clang-format** formatting. It's a complete `vimrc` plus a
+one-command installer for Linux, macOS and Windows, an example project, and a
+keybinding cheatsheet.
 
-Language server is **clangd** via **coc.nvim**; theme is **gruvbox**.
-A VSCode-like experience (completion, go-to, diagnostics, refactoring) inside
-Vim, fully local.
+It gives you a VSCode-like C workflow in plain Vim, running fully locally, with
+the gruvbox theme.
 
-![vim-c-env in action](assets/demo.gif)
+![Vim with clangd: go-to-definition, hover, completion and clang-format](assets/demo.gif)
 
-*Go-to-definition, hover docs, completion and clang-format — all inside Vim.*
+*Go-to-definition, hover docs, completion and clang-format in Vim with clangd.*
 
 ---
 
@@ -643,7 +646,8 @@ vim-c-env/
 ├── coc-settings.json     # coc/clangd settings (→ ~/.vim/coc-settings.json)
 ├── install.sh            # bootstrap
 ├── Makefile              # convenience targets (install/update/doctor/...)
-├── assets/               # demo gifs shown in this README
+├── _config.yml           # GitHub Pages / SEO settings
+├── assets/               # demo gifs + social preview image
 ├── cheatsheet/
 │   └── index.html        # visual cheatsheet (gruvbox)
 ├── example/
