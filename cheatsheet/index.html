@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="uk">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -154,86 +154,86 @@
       <p class="sub">coc.nvim · clangd 22 · gruvbox</p>
     </div>
     <span class="leader-note">leader = <kbd>\</kbd></span>
-    <button class="theme-toggle" id="themeBtn" type="button" aria-label="Перемкнути тему">◐ тема</button>
+    <button class="theme-toggle" id="themeBtn" type="button" aria-label="Toggle theme">◐ theme</button>
   </div>
 </header>
 
 <div class="wrap">
 
-  <section class="flow" aria-label="Робочий цикл">
-    <h2>Робочий цикл</h2>
+  <section class="flow" aria-label="Workflow">
+    <h2>Workflow</h2>
     <ol>
-      <li><div><code>cd</code> у проєкт<span class="desc">корінь із сорсами</span></div></li>
-      <li><div><code>bear -- make</code><span class="desc">раз, або коли змінив флаги</span></div></li>
-      <li><div><code>vim main.c</code><span class="desc">clangd підхопить сам</span></div></li>
-      <li><div>пишеш код<span class="desc">доповнення й помилки наживо</span></div></li>
+      <li><div><code>cd</code> into project<span class="desc">project root with sources</span></div></li>
+      <li><div><code>bear -- make</code><span class="desc">once, or when flags change</span></div></li>
+      <li><div><code>vim main.c</code><span class="desc">clangd picks it up</span></div></li>
+      <li><div>write code<span class="desc">completion &amp; errors live</span></div></li>
     </ol>
   </section>
 
   <div class="grid">
 
     <section class="card">
-      <h3><span class="dot"></span>Навігація по коду</h3>
+      <h3><span class="dot"></span>Code navigation</h3>
       <table>
-        <tr><td class="k"><kbd>gd</kbd></td><td class="d">до визначення</td></tr>
-        <tr><td class="k"><kbd>gr</kbd></td><td class="d">усі використання символу</td></tr>
-        <tr><td class="k"><kbd>gy</kbd></td><td class="d">до типу</td></tr>
-        <tr><td class="k"><kbd>gi</kbd></td><td class="d">до реалізації</td></tr>
-        <tr><td class="k"><kbd>K</kbd></td><td class="d">документація під курсором</td></tr>
-        <tr><td class="k"><kbd>]g</kbd> <span class="plus">/</span> <kbd>[g</kbd></td><td class="d">наступна / попередня помилка</td></tr>
-        <tr><td class="k"><kbd>Ctrl</kbd>+<kbd>o</kbd> <span class="plus">/</span> <kbd>Ctrl</kbd>+<kbd>i</kbd></td><td class="d">назад / вперед по стрибках</td></tr>
+        <tr><td class="k"><kbd>gd</kbd></td><td class="d">go to definition</td></tr>
+        <tr><td class="k"><kbd>gr</kbd></td><td class="d">all references</td></tr>
+        <tr><td class="k"><kbd>gy</kbd></td><td class="d">go to type</td></tr>
+        <tr><td class="k"><kbd>gi</kbd></td><td class="d">go to implementation</td></tr>
+        <tr><td class="k"><kbd>K</kbd></td><td class="d">documentation under cursor</td></tr>
+        <tr><td class="k"><kbd>]g</kbd> <span class="plus">/</span> <kbd>[g</kbd></td><td class="d">next / previous diagnostic</td></tr>
+        <tr><td class="k"><kbd>Ctrl</kbd>+<kbd>o</kbd> <span class="plus">/</span> <kbd>Ctrl</kbd>+<kbd>i</kbd></td><td class="d">jump back / forward</td></tr>
       </table>
     </section>
 
     <section class="card">
-      <h3><span class="dot"></span>Автодоповнення</h3>
+      <h3><span class="dot"></span>Completion</h3>
       <table>
-        <tr><td class="k"><kbd>Tab</kbd></td><td class="d">наступний варіант у списку</td></tr>
-        <tr><td class="k"><kbd>Shift</kbd>+<kbd>Tab</kbd></td><td class="d">попередній варіант</td></tr>
-        <tr><td class="k"><kbd>Enter</kbd></td><td class="d">підтвердити вибір</td></tr>
-        <tr><td class="k"><kbd>Ctrl</kbd>+<kbd>Space</kbd></td><td class="d">викликати вручну</td></tr>
+        <tr><td class="k"><kbd>Tab</kbd></td><td class="d">next item in the list</td></tr>
+        <tr><td class="k"><kbd>Shift</kbd>+<kbd>Tab</kbd></td><td class="d">previous item</td></tr>
+        <tr><td class="k"><kbd>Enter</kbd></td><td class="d">confirm the selection</td></tr>
+        <tr><td class="k"><kbd>Ctrl</kbd>+<kbd>Space</kbd></td><td class="d">trigger manually</td></tr>
       </table>
     </section>
 
     <section class="card">
-      <h3><span class="dot"></span>Рефакторинг &amp; формат</h3>
+      <h3><span class="dot"></span>Refactor &amp; format</h3>
       <table>
-        <tr><td class="k"><kbd>\rn</kbd></td><td class="d">перейменувати символ усюди</td></tr>
+        <tr><td class="k"><kbd>\rn</kbd></td><td class="d">rename symbol everywhere</td></tr>
         <tr><td class="k"><kbd>\ca</kbd></td><td class="d">code action (quick-fix)</td></tr>
-        <tr><td class="k"><kbd>\f</kbd></td><td class="d">форматувати (clang-format)</td></tr>
+        <tr><td class="k"><kbd>\f</kbd></td><td class="d">format (clang-format)</td></tr>
       </table>
     </section>
 
     <section class="card">
-      <h3><span class="dot"></span>Файли, пошук, правки</h3>
+      <h3><span class="dot"></span>Files, search, edit</h3>
       <table>
-        <tr><td class="k"><kbd>Ctrl</kbd>+<kbd>n</kbd></td><td class="d">дерево файлів (NERDTree)</td></tr>
-        <tr><td class="k"><code class="ex">:Files</code></td><td class="d">fuzzy-пошук файлів</td></tr>
-        <tr><td class="k"><code class="ex">:Rg текст</code></td><td class="d">пошук по вмісту (ripgrep)</td></tr>
-        <tr><td class="k"><kbd>\c</kbd><kbd>Space</kbd></td><td class="d">за/роз-коментувати</td></tr>
-        <tr><td class="k"><kbd>ysiw"</kbd></td><td class="d">обгорнути слово в лапки</td></tr>
-        <tr><td class="k"><kbd>cs"'</kbd> <span class="plus">/</span> <kbd>ds"</kbd></td><td class="d">змінити / прибрати обгортку</td></tr>
+        <tr><td class="k"><kbd>Ctrl</kbd>+<kbd>n</kbd></td><td class="d">file tree (NERDTree)</td></tr>
+        <tr><td class="k"><code class="ex">:Files</code></td><td class="d">fuzzy-find files</td></tr>
+        <tr><td class="k"><code class="ex">:Rg text</code></td><td class="d">search by content (ripgrep)</td></tr>
+        <tr><td class="k"><kbd>\c</kbd><kbd>Space</kbd></td><td class="d">toggle comment</td></tr>
+        <tr><td class="k"><kbd>ysiw"</kbd></td><td class="d">wrap word in quotes</td></tr>
+        <tr><td class="k"><kbd>cs"'</kbd> <span class="plus">/</span> <kbd>ds"</kbd></td><td class="d">change / delete surround</td></tr>
       </table>
     </section>
 
     <section class="card cmd">
-      <h3><span class="dot"></span>coc / clangd команди</h3>
+      <h3><span class="dot"></span>coc / clangd commands</h3>
       <table>
-        <tr><td class="k"><code class="ex">:CocInfo</code></td><td class="d">діагностика coc (чи живий clangd)</td></tr>
-        <tr><td class="k"><code class="ex">:CocList diagnostics</code></td><td class="d">усі помилки проєкту списком</td></tr>
-        <tr><td class="k"><code class="ex">:CocList extensions</code></td><td class="d">встановлені розширення</td></tr>
-        <tr><td class="k"><code class="ex">:CocCommand clangd.switchSourceHeader</code></td><td class="d">стрибок <kbd>.c</kbd> ↔ <kbd>.h</kbd></td></tr>
-        <tr><td class="k"><code class="ex">:CocCommand clangd.symbolInfo</code></td><td class="d">інфо про символ під курсором</td></tr>
+        <tr><td class="k"><code class="ex">:CocInfo</code></td><td class="d">coc diagnostics (is clangd alive)</td></tr>
+        <tr><td class="k"><code class="ex">:CocList diagnostics</code></td><td class="d">all project errors</td></tr>
+        <tr><td class="k"><code class="ex">:CocList extensions</code></td><td class="d">installed extensions</td></tr>
+        <tr><td class="k"><code class="ex">:CocCommand clangd.switchSourceHeader</code></td><td class="d">jump <kbd>.c</kbd> ↔ <kbd>.h</kbd></td></tr>
+        <tr><td class="k"><code class="ex">:CocCommand clangd.symbolInfo</code></td><td class="d">symbol info under cursor</td></tr>
       </table>
     </section>
 
     <section class="card cmd">
-      <h3><span class="dot"></span>Плагіни &amp; упкіп</h3>
+      <h3><span class="dot"></span>Plugins &amp; upkeep</h3>
       <table>
-        <tr><td class="k"><code class="ex">:PlugInstall</code></td><td class="d">встановити нові плагіни</td></tr>
-        <tr><td class="k"><code class="ex">:PlugUpdate</code></td><td class="d">оновити плагіни</td></tr>
-        <tr><td class="k"><code class="ex">:CocUpdate</code></td><td class="d">оновити coc-розширення</td></tr>
-        <tr><td class="k"><code class="ex">compile_flags.txt</code></td><td class="d">для 1 файлу замість bear: по флагу на рядок</td></tr>
+        <tr><td class="k"><code class="ex">:PlugInstall</code></td><td class="d">install new plugins</td></tr>
+        <tr><td class="k"><code class="ex">:PlugUpdate</code></td><td class="d">update plugins</td></tr>
+        <tr><td class="k"><code class="ex">:CocUpdate</code></td><td class="d">update coc extensions</td></tr>
+        <tr><td class="k"><code class="ex">compile_flags.txt</code></td><td class="d">one file instead of bear: one flag per line</td></tr>
       </table>
     </section>
 
