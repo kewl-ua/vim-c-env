@@ -1,4 +1,4 @@
-# GitHub Pages: README.md becomes the site index, cheatsheet/ is served as-is.
+# GitHub Pages: README.md becomes the site index.
 title: vim-c-env
 description: >-
   Vim as a C/C++ IDE: clangd LSP via coc.nvim with autocompletion,

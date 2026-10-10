@@ -11,7 +11,6 @@
 | `make install` | повний bootstrap (`install.sh`) |
 | `make link` | лише симлінки конфігів і Vim-пакета (без плагінів) |
 | `make update` | `PlugUpdate` + `CocUpdate` |
-| `make cheatsheet` | відкриває `cheatsheet/index.html` у браузері |
 | `make example` | збирає приклад на C |
 | `make example-unix` | збирає й запускає POSIX-приклад pipeline |
 | `make example-arm` | збирає приклад для Cortex-M4 (потрібен `arm-none-eabi-gcc`) |
@@ -71,8 +70,6 @@ vim-c-env/
 │   └── vim-c-env.txt     # cheatsheet as a Vim help page (:Cheatsheet)
 ├── plugin/
 │   └── vim-c-env.vim     # defines :Cheatsheet and \?
-├── cheatsheet/
-│   └── index.html        # visual cheatsheet (gruvbox)
 ├── example-arm/          # bare-metal STM32F407 blink (Cortex-M4)
 ├── example-esp32/        # ESP-IDF FreeRTOS blink, any ESP32 chip
 ├── example-unix/         # POSIX pipeline: fork, pipe, exec; asan/valgrind/strace targets

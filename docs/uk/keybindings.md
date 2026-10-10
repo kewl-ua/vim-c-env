@@ -3,8 +3,7 @@
 [← vim-c-env](../../README.uk.md) · [Уся документація](README.md) · [English](../keybindings.md) · **Українська**
 
 У Vim: **`:Cheatsheet`** або **`\?`** відкриває цей довідник як help-сторінку
-(`:help vim-c-env`). У браузері: **`cheatsheet/index.html`** (`make cheatsheet`).
-Leader-клавіша — `\`.
+(`:help vim-c-env`). Leader-клавіша — `\`.
 
 **Навігація**
 | Клавіша | Дія |

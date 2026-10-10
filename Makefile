@@ -6,7 +6,7 @@ PACKDIR := $(HOME)/.vim/pack/vim-c-env/start
 NVIMDIR := $(or $(XDG_CONFIG_HOME),$(HOME)/.config)/nvim
 .DEFAULT_GOAL := help
 
-.PHONY: help install link update doctor cheatsheet example example-arm example-unix demos hero test clean uninstall
+.PHONY: help install link update doctor example example-arm example-unix demos hero test clean uninstall
 
 help: ## show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -45,11 +45,6 @@ doctor: ## check that required tools are present
 	@man -w 3 printf >/dev/null 2>&1 && echo "  C man pages ok (\\k)" || echo "  C man pages MISSING (optional, see docs/unix.md)"
 	@echo "nvim   : $$(command -v nvim   || echo 'not installed (optional)') $$(nvim --version 2>/dev/null | head -1)"
 	@$(VIM) --version 2>/dev/null | grep -q '+terminal' && echo "  +terminal ok (debugging)" || echo "  +terminal MISSING (optional, needed for :Termdebug)"
-
-cheatsheet: ## open the HTML cheatsheet in a browser
-	@xdg-open cheatsheet/index.html 2>/dev/null \
-	  || open cheatsheet/index.html 2>/dev/null \
-	  || echo "open cheatsheet/index.html manually"
 
 example: ## build the example C project (uses bear if present)
 	@$(MAKE) --no-print-directory -C example

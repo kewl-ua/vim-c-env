@@ -3,8 +3,7 @@
 [← vim-c-env](../README.md) · [All docs](README.md) · **English** · [Українська](uk/keybindings.md)
 
 Inside Vim: **`:Cheatsheet`** or **`\?`** opens this reference as a help page
-(`:help vim-c-env`). In a browser: **`cheatsheet/index.html`**
-(`make cheatsheet`). Leader key is `\`.
+(`:help vim-c-env`). Leader key is `\`.
 
 **Navigation**
 | Key | Action |
