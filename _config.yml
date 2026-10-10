@@ -9,6 +9,15 @@ baseurl: /vim-c-env
 lang: en
 image: /assets/social-preview.png
 author: kewl-ua
+repository: kewl-ua/vim-c-env
+
+# Richer cards for jekyll-seo-tag (Twitter/OpenGraph + JSON-LD sameAs).
+twitter:
+  card: summary_large_image
+social:
+  name: vim-c-env
+  links:
+    - https://github.com/kewl-ua/vim-c-env
 
 plugins:
   - jekyll-seo-tag
